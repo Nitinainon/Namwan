@@ -1,35 +1,37 @@
 # สถานะการส่งมอบ
 
-7 ตุลาคม 2026 — branch `codex/namwan-showroom`
+8 ตุลาคม 2026 — branch `codex/namwan-showroom`
 
 ## ทำแล้ว
 
 - หน้าร้านภาษาไทยธีมแมว ค้นหา หมวดหมู่ สินค้าแนะนำ รายละเอียด และลิงก์ affiliate
-- หน้า `/admin` ล็อกอินด้วยอีเมล/รหัสผ่าน ตรวจสิทธิ์ผ่าน Supabase Auth และรายชื่อแอดมิน
+- หน้า `/admin` ล็อกอินด้วยยูเซอร์/รหัสผ่าน ตรวจสิทธิ์ผ่าน Supabase Auth และรายชื่อแอดมิน (build ใหม่รออัปโหลดอัปเดต)
 - จัดการสินค้า/รูป/หมวดหมู่/ข้อมูลหน้าร้าน และเปลี่ยนรหัสผ่านผ่านแอดมิน
 - SQL migration สำหรับตาราง RLS สิทธิ์ Storage และ RPC บันทึกแบบตรวจ revision
-- ชุดทดสอบ 34 รายการผ่าน รวมการตรวจสิทธิ์ใน PostgreSQL ผ่าน PGlite
+- ชุดทดสอบ 36 รายการผ่าน รวมการตรวจสิทธิ์ใน PostgreSQL ผ่าน PGlite
 - Build ผ่าน, `npm audit` ไม่พบช่องโหว่ และ `git diff --check` ผ่าน
 - ตรวจ browser ที่ 375px และ 1280px: ไม่มี horizontal overflow บนมือถือ, ค้นหาภาษาไทยและรายละเอียดทำงาน, หน้าร้านไม่มีลิงก์แอดมิน และ `/admin` ที่ไม่ล็อกอินไม่มีรายการหลังบ้าน
 - ตรวจโดย reviewer อีกตัว และแก้การสูญเสียฟอร์มเมื่อ refresh token/กลับมาที่แท็บ กับการปิด modal ระหว่าง save/upload มี regression tests ที่เห็น failure ก่อนแก้และผ่านหลังแก้
 - มี netlify.toml, .env.example และคู่มือติดตั้งภาษาไทย
+- ติดตั้ง schema และ seed บน Supabase จริงสำเร็จ: 4 หมวด / 6 สินค้า / 1 ข้อมูลร้าน ตรวจ REST อ่านได้ และ anonymous write ถูกปฏิเสธด้วย HTTP 401
+- เจ้าของอัปโหลด build ผ่าน Netlify Drop และตั้งชื่อ numwan: https://numwan.netlify.app/ ตรวจหน้าร้านอ่านฐานจริงได้ /admin แสดงหน้า login ไม่มีข้อมูลหลังบ้าน และ headers CSP/noindex ทำงาน
+- ปิด public signup และตั้ง Site URL เป็น https://numwan.netlify.app พร้อม redirect URL /admin
 
 ## ยังต้องทำบนบัญชีจริง
 
-- Supabase REST โปรเจกต์ที่ให้มายืนยันว่า `public.products` ยังไม่มี (PGRST205) ต้องรัน migration ใน SQL Editor
-- สร้างบัญชีแอดมินด้วยรหัสผ่านที่เจ้าของกำหนดเอง เพิ่ม UID ใน private.admin_users และปิด public signup
+- เจ้าของสร้างบัญชียูเซอร์ namwan ด้วยรหัสผ่านที่กำหนดเอง จากนั้นเพิ่ม UID ใน private.admin_users (เปิดฟอร์มให้แล้ว และใส่อีเมลภายใน namwan@admin.numwan.netlify.app ให้เมื่อช่องว่าง)
 - ทดสอบ Auth, upload, CRUD และการเห็นข้อมูลจากอีกอุปกรณ์ใน Supabase จริง PGlite จำลอง Auth/Storage schemas จึงไม่แทนการทดสอบบริการจริง
-- Netlify CLI และหน้า Dashboard ยังไม่ล็อกอิน ต้องเชื่อม repository/ตั้ง env และ deploy ก่อนมี URL สาธารณะ
+- เจ้าของอัปโหลด ZIP ใหม่สำหรับหน้า login แบบยูเซอร์–พาสเวิร์ด แล้วตรวจ Auth / CRUD / upload จริง เว็บไซต์ปัจจุบันยังใช้ build ก่อนเปลี่ยนหน้า login
 - GitHub push ยังไม่สำเร็จเพราะไม่มี credentials ที่ใช้ได้ เก็บ commit ทั้งหมดในเครื่องและตั้ง origin ไป `Nitinainon/Namwan` แล้ว
 - มี build ZIP `release/namwan-netlify.zip` สำหรับแตกไฟล์และอัปโหลดโฟลเดอร์ผ่าน Netlify Drop พร้อม routing และ headers
 
 ## การตัดสินใจระหว่างพัฒนา
 
 - เตรียม `supabase/seed.sql` สำหรับข้อมูลตัวอย่าง 4 หมวด / 6 สินค้าในฐานข้อมูลจริง ซึ่งแอดมินแก้ได้ผ่าน RPC เดิม ตัวอย่างไม่มีลิงก์ซื้อ และยอมรับเฉพาะรูปในชุด assets ที่ระบุไว้หรือ HTTPS; seed ล็อกตารางและปฏิเสธร้านที่มีข้อมูลแล้ว ทดสอบด้วย PostgreSQL ว่าแก้ตัวอย่างได้และไม่ทับข้อมูลเดิม
-- เจ้าของยืนยันว่าล็อกอินใน Chrome แต่เครื่องมือ browser เชื่อมเฉพาะ Edge จึงยังติดตั้งหรือ deploy จริงไม่ได้ เปิด Supabase และ Netlify ใน Edge ไว้รอเจ้าของเข้าสู่ระบบ
+- ช่วงแรกติดขัดเพราะล็อกอินใน Chrome ต่อมาเจ้าของล็อกอินใน Edge แล้ว ติดตั้ง Supabase และ deploy ได้ ส่วนขยาย Edge อัปโหลดไฟล์จากเครื่องไม่ได้ เจ้าของอัปโหลด ZIP ผ่าน Netlify Drop ด้วยตัวเอง
 
 - เปลี่ยนชื่อเริ่มต้นเป็น “แม่น้ำหวานลูก 4” และสินค้าเป็นแถวแนวตั้งรูปซ้าย–ข้อความขวาตามคำขอ ใช้ description และ recommendation เดิมสำหรับรายละเอียดสั้น/รีวิวจากแอดมิน ไม่สร้างคะแนนหรือรีวิวลูกค้าสมมติ ปุ่มดูข้อมูลเพิ่มเติมเปิดลิงก์ Shopee ที่ผ่านการตรวจ host โดยตรง เก็บ tracking URL เดิม ไม่เปิด modal; สินค้าตัวอย่างไม่มีลิงก์ซื้อแสดงปุ่ม disabled
-- ตรวจแถวสินค้าบนจอ 390px และ 320px ไม่มี horizontal overflow และ tests ตรวจ direct affiliate link, description/recommendation, brand และ unavailable CTA ผ่าน การเปลี่ยนชื่อฐานข้อมูลนี้เป็นค่าเริ่มต้นสำหรับติดตั้งใหม่; hosted Supabase ยังไม่ได้ติดตั้ง schema
+- ตรวจแถวสินค้าบนจอ 390px และ 320px ไม่มี horizontal overflow และ tests ตรวจ direct affiliate link, description/recommendation, brand และ unavailable CTA ผ่าน
 
 - ปรับหน้าร้านตามแบบที่ยืนยันวันที่ 8 ตุลาคม 2026: หัวเว็บเล็กธีมแมว ขาว–ชมพูพาสเทล หมวดแนวตั้ง กดหมวดก่อนเห็นสินค้า ค้นหาและเรียงราคา โดยค่าเริ่มต้นให้สินค้าที่แอดมินแนะนำขึ้นก่อน ใช้ featured และ sortOrder เดิม ไม่ต้องเปลี่ยนฐานข้อมูล
 - ตรวจหน้าร้านใน browser ที่ 390px และ 320px: หมวดเปิดเฉพาะสินค้าในหมวด ค้นหาไม่พบแสดงสถานะถูกต้อง ราคาต่ำไปสูงทำงาน กลับหมวดได้ และไม่มี horizontal overflow; reviewer ตรวจการเปลี่ยนนี้และรันทดสอบ 29 ข้อผ่าน

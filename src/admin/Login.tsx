@@ -11,7 +11,7 @@ export function Login({
   onSuccess: () => void;
   message?: string;
 }) {
-  const [email, setEmail] = useState(""),
+  const [username, setUsername] = useState(""),
     [password, setPassword] = useState(""),
     [show, setShow] = useState(false),
     [busy, setBusy] = useState(false),
@@ -24,7 +24,7 @@ export function Login({
     setBusy(true);
     setError("");
     try {
-      await signIn(email, password);
+      await signIn(username, password);
       setPassword("");
       onSuccess();
     } catch (e) {
@@ -48,14 +48,16 @@ export function Login({
         <p>พื้นที่จัดการร้านสำหรับแอดมิน</p>
         <form onSubmit={submit}>
           <label>
-            อีเมล
+            ยูเซอร์
             <input
-              type="email"
+              type="text"
+              autoCapitalize="none"
+              spellCheck={false}
               autoComplete="username"
               required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="อีเมลบัญชีแอดมิน"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="เช่น namwan"
             />
           </label>
           <label>

@@ -23,12 +23,14 @@ export async function getAdminSession(): Promise<Session | null> {
   if (check.data !== true) throw new Error("บัญชีนี้ไม่มีสิทธิ์แอดมิน");
   return data.session;
 }
-export async function signIn(email: string, password: string): Promise<void> {
+export async function signIn(username: string, password: string): Promise<void> {
+  const identifier = username.trim().toLowerCase();
+  const email = identifier.includes("@") ? identifier : `${identifier}@admin.numwan.netlify.app`;
   const { error } = await db().auth.signInWithPassword({
-    email: email.trim(),
+    email,
     password,
   });
-  if (error) throw new Error("เข้าสู่ระบบไม่สำเร็จ กรุณาตรวจอีเมลและรหัสผ่าน");
+  if (error) throw new Error("เข้าสู่ระบบไม่สำเร็จ กรุณาตรวจยูเซอร์และรหัสผ่าน");
 }
 export async function signOut(): Promise<void> {
   const { error } = await db().auth.signOut({ scope: "local" });
