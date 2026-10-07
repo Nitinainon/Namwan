@@ -1,4 +1,4 @@
-import { useRef, useState, type FormEvent } from "react";
+import { useRef, useState, useEffect, type FormEvent } from "react";
 import { Save } from "lucide-react";
 import type { Product, ProductInput, Category } from "../lib/types";
 import { saveProduct, uploadImage } from "../lib/catalog";
@@ -21,11 +21,13 @@ export function ProductEditor({
   categories,
   onSaved,
   onCancel,
+  onBusyChange,
 }: {
   product?: Product;
   categories: Category[];
   onSaved: (p: Product) => void;
   onCancel: () => void;
+  onBusyChange?: (busy: boolean) => void;
 }) {
   const [form, setForm] = useState<ProductInput>(product || blank),
     [busy, setBusy] = useState(false),
@@ -34,6 +36,9 @@ export function ProductEditor({
     [errors, setErrors] = useState<Record<string, string>>({});
   const lock = useRef(false),
     uploadLock = useRef(false);
+  useEffect(() => {
+    onBusyChange?.(busy || uploading);
+  }, [busy, uploading, onBusyChange]);
   function set<K extends keyof ProductInput>(field: K, value: ProductInput[K]) {
     setForm((f) => ({ ...f, [field]: value }));
     setErrors((e) => ({ ...e, [field]: "" }));

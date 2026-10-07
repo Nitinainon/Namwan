@@ -51,6 +51,7 @@ export default function Dashboard({
     [message, setMessage] = useState(""),
     [error, setError] = useState(false);
   const lock = useRef(false);
+  const [editorBusy, setEditorBusy] = useState(false);
   async function load() {
     setLoading(true);
     setMessage("");
@@ -69,6 +70,7 @@ export default function Dashboard({
     void load();
   }, []);
   function savedProduct(p: Product) {
+    setEditorBusy(false);
     setCatalog((c) =>
       c
         ? {
@@ -84,6 +86,7 @@ export default function Dashboard({
     setMessage("บันทึกสินค้าแล้ว");
   }
   function savedCategory(cat: Category) {
+    setEditorBusy(false);
     setCatalog((c) =>
       c
         ? {
@@ -386,6 +389,7 @@ export default function Dashboard({
         <Modal
           title={editor.kind === "product" ? "จัดการสินค้า" : "จัดการหมวดหมู่"}
           onClose={() => setEditor(null)}
+          canClose={!editorBusy}
         >
           {editor.kind === "product" ? (
             <ProductEditor
@@ -393,12 +397,14 @@ export default function Dashboard({
               categories={catalog.categories}
               onSaved={savedProduct}
               onCancel={() => setEditor(null)}
+              onBusyChange={setEditorBusy}
             />
           ) : (
             <CategoryEditor
               category={editor.category}
               onSaved={savedCategory}
               onCancel={() => setEditor(null)}
+              onBusyChange={setEditorBusy}
             />
           )}
         </Modal>
@@ -406,6 +412,7 @@ export default function Dashboard({
       {deleting && (
         <Modal
           title="ยืนยันการลบ"
+          canClose={!busy}
           onClose={() => {
             if (!busy) setDeleting(null);
           }}

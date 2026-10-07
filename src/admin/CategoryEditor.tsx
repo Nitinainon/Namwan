@@ -1,4 +1,4 @@
-import { useRef, useState, type FormEvent } from "react";
+import { useRef, useState, useEffect, type FormEvent } from "react";
 import type { Category } from "../lib/types";
 import { saveCategory } from "../lib/catalog";
 import { errorMessage } from "../lib/validation";
@@ -7,16 +7,21 @@ export function CategoryEditor({
   category,
   onSaved,
   onCancel,
+  onBusyChange,
 }: {
   category?: Category;
   onSaved: (c: Category) => void;
   onCancel: () => void;
+  onBusyChange?: (busy: boolean) => void;
 }) {
   const [name, setName] = useState(category?.name || ""),
     [order, setOrder] = useState(category?.sortOrder || 0),
     [busy, setBusy] = useState(false),
     [error, setError] = useState("");
   const lock = useRef(false);
+  useEffect(() => {
+    onBusyChange?.(busy);
+  }, [busy, onBusyChange]);
   async function submit(e: FormEvent) {
     e.preventDefault();
     if (lock.current) return;

@@ -1,4 +1,4 @@
-import type { Session } from "@supabase/supabase-js";
+import type { Session, AuthChangeEvent } from "@supabase/supabase-js";
 import { getSupabase } from "./supabase";
 function db() {
   const client = getSupabase();
@@ -11,7 +11,12 @@ export async function getAdminSession(): Promise<Session | null> {
   if (error) throw error;
   if (!data.session) return null;
   const verified = await client.auth.getUser();
-  if (verified.error || !verified.data.user) return null;
+  if (
+    verified.error ||
+    !verified.data.user ||
+    verified.data.user.id !== data.session.user.id
+  )
+    return null;
   const check = await client.rpc("is_admin");
   if (check.error)
     throw new Error("ตรวจสิทธิ์ไม่ได้ กรุณาตรวจการติดตั้งฐานข้อมูล");
@@ -37,11 +42,20 @@ export async function changePassword(password: string): Promise<void> {
       "เปลี่ยนรหัสผ่านไม่สำเร็จ กรุณาเข้าสู่ระบบใหม่แล้วลองอีกครั้ง",
     );
 }
-export function subscribeAuth(listener: () => void): () => void {
+export function subscribeAuth(
+  listener: (event: AuthChangeEvent, session: Session | null) => void,
+): () => void {
   const client = getSupabase();
   if (!client) return () => {};
-  const { data } = client.auth.onAuthStateChange(() => {
-    setTimeout(listener, 0);
+  let active = true;
+  const { data } = client.auth.onAuthStateChange((event, session) => {
+    // Avoid calling Auth methods while Supabase holds its event lock.
+    setTimeout(() => {
+      if (active) listener(event, session);
+    }, 0);
   });
-  return () => data.subscription.unsubscribe();
+  return () => {
+    active = false;
+    data.subscription.unsubscribe();
+  };
 }

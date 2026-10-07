@@ -1,4 +1,11 @@
-import { useEffect, useState, useCallback, lazy, Suspense } from "react";
+import {
+  useEffect,
+  useState,
+  useCallback,
+  useRef,
+  lazy,
+  Suspense,
+} from "react";
 import { getAdminSession, subscribeAuth, signOut } from "../lib/auth";
 import { errorMessage } from "../lib/validation";
 import { Login } from "./Login";
@@ -8,6 +15,7 @@ export function AdminGate() {
     [message, setMessage] = useState(""),
     [generation, setGeneration] = useState(0);
   const check = useCallback(() => setGeneration((n) => n + 1), []);
+  const identity = useRef<string | null>(null);
   useEffect(() => {
     const meta = document.createElement("meta");
     meta.name = "robots";
@@ -18,16 +26,19 @@ export function AdminGate() {
   }, []);
   useEffect(() => {
     let active = true;
-    setState("loading");
+    // Same-user token refresh and tab refocus must preserve mounted forms.
+    if (!identity.current) setState("loading");
     void getAdminSession()
       .then((s) => {
         if (active) {
+          identity.current = s?.user.id || null;
           setMessage("");
           setState(s ? "admin" : "login");
         }
       })
       .catch((e) => {
         if (active) {
+          identity.current = null;
           setMessage(errorMessage(e));
           setState("login");
         }
@@ -36,7 +47,21 @@ export function AdminGate() {
       active = false;
     };
   }, [generation]);
-  useEffect(() => subscribeAuth(check), [check]);
+  useEffect(
+    () =>
+      subscribeAuth((event, session) => {
+        if (event === "SIGNED_OUT" || !session) {
+          identity.current = null;
+          setState("login");
+          setMessage("");
+        } else if (identity.current && session.user.id !== identity.current) {
+          identity.current = null;
+          setState("loading");
+        }
+        check();
+      }),
+    [check],
+  );
   if (state === "loading")
     return (
       <main className="center-state" role="status">
@@ -50,6 +75,7 @@ export function AdminGate() {
       <Dashboard
         onLogout={async () => {
           await signOut();
+          identity.current = null;
           setState("login");
         }}
       />

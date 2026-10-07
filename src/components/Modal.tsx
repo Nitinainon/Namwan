@@ -4,10 +4,12 @@ export function Modal({
   title,
   onClose,
   children,
+  canClose = true,
 }: {
   title: string;
   onClose: () => void;
   children: ReactNode;
+  canClose?: boolean;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -24,7 +26,7 @@ export function Modal({
     <div
       className="modal-backdrop"
       onMouseDown={(e) => {
-        if (e.target === e.currentTarget) onClose();
+        if (canClose && e.target === e.currentTarget) onClose();
       }}
     >
       <div
@@ -34,7 +36,7 @@ export function Modal({
         aria-modal="true"
         aria-label={title}
         onKeyDown={(e) => {
-          if (e.key === "Escape") onClose();
+          if (canClose && e.key === "Escape") onClose();
           if (e.key === "Tab") {
             const items = ref.current?.querySelectorAll<HTMLElement>(
               "button:not(:disabled),input:not(:disabled),select:not(:disabled),textarea:not(:disabled),a[href]",
@@ -56,6 +58,7 @@ export function Modal({
           className="icon-button modal-close"
           aria-label="ปิดหน้าต่าง"
           onClick={onClose}
+          disabled={!canClose}
         >
           <X size={20} />
         </button>

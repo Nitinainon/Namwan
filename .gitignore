@@ -6,3 +6,4 @@ dist/
 .netlify/
 .superpowers/
 *.log
+*.tsbuildinfo

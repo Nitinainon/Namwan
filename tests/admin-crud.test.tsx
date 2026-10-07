@@ -1,4 +1,10 @@
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import {
+  render,
+  screen,
+  fireEvent,
+  waitFor,
+  act,
+} from "@testing-library/react";
 import { test, expect, vi, beforeEach } from "vitest";
 import { demoCatalog } from "../src/demo/catalog";
 const { api } = vi.hoisted(() => ({
@@ -120,3 +126,43 @@ test("cancel delete does not remove product", async () => {
   expect(api.deleteProduct).not.toHaveBeenCalled();
   expect(screen.getByText("แก้วเซรามิกสำหรับเช้าที่สดใส")).toBeInTheDocument();
 });
+
+test.each(["save", "upload"])(
+  "pending %s cannot dismiss editor through X Escape or backdrop",
+  async (operation) => {
+    let rejectPending!: (reason: Error) => void;
+    const pending = new Promise((_, reject) => {
+      rejectPending = reject;
+    });
+    api.saveProduct.mockImplementation(() => pending);
+    api.uploadImage.mockImplementation(() => pending);
+    render(<Dashboard onLogout={async () => {}} />);
+    await screen.findByText("แก้วเซรามิกสำหรับเช้าที่สดใส");
+    fireEvent.click(screen.getByRole("button", { name: "เพิ่มสินค้า" }));
+    fireEvent.change(screen.getByLabelText("ชื่อสินค้า"), {
+      target: { value: "ข้อมูลที่ต้องเก็บไว้" },
+    });
+    fireEvent.change(screen.getByLabelText("ลิงก์ affiliate Shopee"), {
+      target: { value: "https://shopee.co.th/test" },
+    });
+    if (operation === "save")
+      fireEvent.click(screen.getByRole("button", { name: "บันทึกสินค้า" }));
+    else
+      fireEvent.change(screen.getByLabelText("อัปโหลดรูปสินค้า"), {
+        target: { files: [new File(["x"], "a.webp", { type: "image/webp" })] },
+      });
+    fireEvent.click(screen.getByRole("button", { name: "ปิดหน้าต่าง" }));
+    fireEvent.keyDown(screen.getByRole("dialog"), { key: "Escape" });
+    fireEvent.mouseDown(screen.getByRole("dialog").parentElement!);
+    expect(screen.getByLabelText("ชื่อสินค้า")).toHaveValue(
+      "ข้อมูลที่ต้องเก็บไว้",
+    );
+    await act(async () => {
+      rejectPending(new Error("เชื่อมต่อไม่ได้"));
+    });
+    await screen.findByText("เชื่อมต่อไม่ได้");
+    expect(screen.getByLabelText("ชื่อสินค้า")).toHaveValue(
+      "ข้อมูลที่ต้องเก็บไว้",
+    );
+  },
+);
