@@ -12,9 +12,21 @@ vi.mock("../src/lib/catalog", () => ({
   })),
 }));
 import { Storefront } from "../src/storefront/Storefront";
-test("storefront searches Thai, filters categories and has no admin link", async () => {
+test("homepage shows categories first, opens only that category and returns home", async () => {
   render(<Storefront />);
-  await screen.findByText("แก้วเซรามิกสำหรับเช้าที่สดใส");
+  const category = await screen.findByRole("button", { name: /บ้าน & ไลฟ์สไตล์/ });
+  expect(screen.queryByText("แก้วเซรามิกสำหรับเช้าที่สดใส")).not.toBeInTheDocument();
+  expect(screen.queryByRole("searchbox")).not.toBeInTheDocument();
+  fireEvent.click(category);
+  expect(screen.getByText("แก้วเซรามิกสำหรับเช้าที่สดใส")).toBeInTheDocument();
+  expect(screen.queryByText("กระเป๋าผ้าเพื่อนแมว")).not.toBeInTheDocument();
+  fireEvent.click(screen.getByRole("button", { name: /กลับไปหมวดหมู่/ }));
+  expect(screen.getByRole("button", { name: /บ้าน & ไลฟ์สไตล์/ })).toBeInTheDocument();
+  expect(screen.queryByText("แก้วเซรามิกสำหรับเช้าที่สดใส")).not.toBeInTheDocument();
+});
+test("category searches Thai and has no admin link", async () => {
+  render(<Storefront />);
+  fireEvent.click(await screen.findByRole("button", { name: /บ้าน & ไลฟ์สไตล์/ }));
   expect(
     screen.queryByRole("link", { name: /แอดมิน/ }),
   ).not.toBeInTheDocument();
@@ -30,6 +42,7 @@ test("storefront searches Thai, filters categories and has no admin link", async
 });
 test("detail retains original affiliate URL and closes with Escape", async () => {
   render(<Storefront />);
+  fireEvent.click(await screen.findByRole("button", { name: /บ้าน & ไลฟ์สไตล์/ }));
   fireEvent.click(await screen.findByText("แก้วเซรามิกสำหรับเช้าที่สดใส"));
   const link = screen.getByRole("link", { name: /ดูสินค้าที่ Shopee/ });
   expect(link).toHaveAttribute(
@@ -39,4 +52,14 @@ test("detail retains original affiliate URL and closes with Escape", async () =>
   expect(link).toHaveAttribute("rel", "sponsored noopener noreferrer");
   fireEvent.keyDown(screen.getByRole("dialog"), { key: "Escape" });
   expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+});
+test("category offers ascending and descending price and recommended sorting", async () => {
+  render(<Storefront />);
+  fireEvent.click(await screen.findByRole("button", { name: /ของน่ารัก/ }));
+  const names = () => screen.getAllByRole("heading", { level: 3 }).map((h) => h.textContent);
+  expect(names()).toEqual(["กระเป๋าผ้าเพื่อนแมว", "สมุดบันทึกเรื่องเล็ก ๆ"]);
+  fireEvent.change(screen.getByRole("combobox", { name: "เรียงสินค้า" }), { target: { value: "price-asc" } });
+  expect(names()).toEqual(["สมุดบันทึกเรื่องเล็ก ๆ", "กระเป๋าผ้าเพื่อนแมว"]);
+  fireEvent.change(screen.getByRole("combobox", { name: "เรียงสินค้า" }), { target: { value: "price-desc" } });
+  expect(names()).toEqual(["กระเป๋าผ้าเพื่อนแมว", "สมุดบันทึกเรื่องเล็ก ๆ"]);
 });

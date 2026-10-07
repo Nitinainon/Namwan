@@ -1,4 +1,5 @@
 import { expect, test } from "vitest";
+import { demoCatalog } from "../src/demo/catalog";
 import {
   isAffiliateUrl,
   validateProduct,
@@ -16,6 +17,12 @@ test("affiliate URL requires exact trusted HTTPS host and preserves tracking", (
     "https://example.com",
   ])
     expect(isAffiliateUrl(bad)).toBe(false);
+});
+test("recommended items precede others while price sorting keeps unknown prices last", () => {
+  const products = demoCatalog.products.slice(0, 4).map((p, i) => ({ ...p, featured: i === 1, price: [100, 300, 0, null][i], sortOrder: i }));
+  expect(filterProducts(products, "", "").map(p => p.id)).toEqual(["demo-2", "demo-1", "demo-3", "demo-4"]);
+  expect(filterProducts(products, "", "", "price-asc").map(p => p.id)).toEqual(["demo-3", "demo-1", "demo-2", "demo-4"]);
+  expect(filterProducts(products, "", "", "price-desc").map(p => p.id)).toEqual(["demo-2", "demo-1", "demo-3", "demo-4"]);
 });
 test("product validation accepts price zero, rejects negative and missing names", () => {
   expect(

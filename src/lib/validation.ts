@@ -55,10 +55,12 @@ export function validateImage(file: File): string {
     return "รูปภาพต้องมีขนาดไม่เกิน 5 MB และไม่เป็นไฟล์ว่าง";
   return "";
 }
+export type ProductSort = "recommended" | "price-asc" | "price-desc";
 export function filterProducts(
   products: Product[],
   query: string,
   categoryId: string,
+  sort: ProductSort = "recommended",
 ): Product[] {
   const q = query.trim().toLocaleLowerCase("th");
   return products
@@ -71,7 +73,15 @@ export function filterProducts(
             .toLocaleLowerCase("th")
             .includes(q)),
     )
-    .sort((a, b) => a.sortOrder - b.sortOrder);
+    .sort((a, b) => {
+      if (sort !== "recommended") {
+        if (a.price === null && b.price !== null) return 1;
+        if (b.price === null && a.price !== null) return -1;
+        if (a.price !== null && b.price !== null && a.price !== b.price)
+          return sort === "price-asc" ? a.price - b.price : b.price - a.price;
+      }
+      return Number(b.featured) - Number(a.featured) || a.sortOrder - b.sortOrder;
+    });
 }
 export function errorMessage(error: unknown): string {
   return error instanceof Error
