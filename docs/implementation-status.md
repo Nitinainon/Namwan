@@ -20,6 +20,8 @@
 - สร้างบัญชีแอดมินด้วยรหัสผ่านที่เจ้าของกำหนดเอง เพิ่ม UID ใน private.admin_users และปิด public signup
 - ทดสอบ Auth, upload, CRUD และการเห็นข้อมูลจากอีกอุปกรณ์ใน Supabase จริง PGlite จำลอง Auth/Storage schemas จึงไม่แทนการทดสอบบริการจริง
 - Netlify CLI และหน้า Dashboard ยังไม่ล็อกอิน ต้องเชื่อม repository/ตั้ง env และ deploy ก่อนมี URL สาธารณะ
+- GitHub push ยังไม่สำเร็จเพราะไม่มี credentials ที่ใช้ได้ เก็บ commit ทั้งหมดในเครื่องและตั้ง origin ไป `Nitinainon/Namwan` แล้ว
+- มี build ZIP `release/namwan-netlify.zip` สำหรับแตกไฟล์และอัปโหลดโฟลเดอร์ผ่าน Netlify Drop พร้อม routing และ headers
 
 ## การตัดสินใจระหว่างพัฒนา
 
