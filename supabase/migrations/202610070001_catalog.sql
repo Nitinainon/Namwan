@@ -48,7 +48,7 @@ create table public.site_settings (
   revision integer not null default 1
 );
 insert into public.site_settings(site_name,tagline,introduction,affiliate_disclosure) values
-('น้ำหวานคัดให้','ของน่ารักที่อยากบอกต่อ ♡','ค่อย ๆ เลือกของที่ชอบ แล้วส่งต่อให้คุณ มีทั้งของใช้ประจำวันและความน่ารักเล็ก ๆ ที่ทำให้วันธรรมดาพิเศษขึ้น','ลิงก์บางรายการเป็นลิงก์ affiliate หากคุณซื้อผ่านลิงก์นี้ เราอาจได้รับค่าคอมมิชชัน ราคาและโปรโมชันอาจเปลี่ยนแปลง กรุณาตรวจสอบที่ Shopee ก่อนซื้อ');
+('แม่น้ำหวานลูก 4','ของน่ารักที่อยากบอกต่อ ♡','ค่อย ๆ เลือกของที่ชอบ แล้วส่งต่อให้คุณ มีทั้งของใช้ประจำวันและความน่ารักเล็ก ๆ ที่ทำให้วันธรรมดาพิเศษขึ้น','ลิงก์บางรายการเป็นลิงก์ affiliate หากคุณซื้อผ่านลิงก์นี้ เราอาจได้รับค่าคอมมิชชัน ราคาและโปรโมชันอาจเปลี่ยนแปลง กรุณาตรวจสอบที่ Shopee ก่อนซื้อ');
 
 alter table public.products enable row level security;
 alter table public.categories enable row level security;

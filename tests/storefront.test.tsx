@@ -40,18 +40,23 @@ test("category searches Thai and has no admin link", async () => {
   });
   expect(screen.getByText(/ไม่พบสินค้าที่ตรงกัน/)).toBeInTheDocument();
 });
-test("detail retains original affiliate URL and closes with Escape", async () => {
+test("product row shows description and recommendation and links directly to Shopee", async () => {
   render(<Storefront />);
   fireEvent.click(await screen.findByRole("button", { name: /บ้าน & ไลฟ์สไตล์/ }));
-  fireEvent.click(await screen.findByText("แก้วเซรามิกสำหรับเช้าที่สดใส"));
-  const link = screen.getByRole("link", { name: /ดูสินค้าที่ Shopee/ });
+  expect(screen.getByText("ตัวอย่างสินค้า — แทนที่ด้วยสินค้าที่คุณแนะนำได้ในหน้าแอดมิน")).toBeInTheDocument();
+  expect(screen.getByText("จิบกาแฟแล้วใจฟู สีละมุนเข้ากับทุกมุมบ้าน")).toBeInTheDocument();
+  const link = screen.getByRole("link", { name: "ดูข้อมูลเพิ่มเติม: แก้วเซรามิกสำหรับเช้าที่สดใส" });
   expect(link).toHaveAttribute(
     "href",
     "https://s.shopee.co.th/test?tracking=one",
   );
   expect(link).toHaveAttribute("rel", "sponsored noopener noreferrer");
-  fireEvent.keyDown(screen.getByRole("dialog"), { key: "Escape" });
+  expect(link).toHaveAttribute("target", "_blank");
   expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+});
+test("storefront displays the renamed brand", async () => {
+  render(<Storefront />);
+  expect(await screen.findByRole("link", { name: "แม่น้ำหวานลูก 4 หน้าหลัก" })).toBeInTheDocument();
 });
 test("category offers ascending and descending price and recommended sorting", async () => {
   render(<Storefront />);

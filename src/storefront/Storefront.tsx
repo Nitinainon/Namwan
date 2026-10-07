@@ -3,10 +3,9 @@ import { Search, Heart, Sparkles, Home, Cat, Flower2, Gift, ChevronRight, ArrowL
 import { loadCatalog } from "../lib/catalog";
 import { demoCatalog } from "../demo/catalog";
 import { filterProducts, errorMessage, type ProductSort } from "../lib/validation";
-import type { Catalog, Product } from "../lib/types";
+import type { Catalog } from "../lib/types";
 import { CatMark } from "../components/CatMark";
 import { ProductCard } from "./ProductCard";
-import { ProductDetails } from "./ProductDetails";
 
 const icons = [Home, Flower2, Cat, Gift];
 export function Storefront() {
@@ -16,7 +15,6 @@ export function Storefront() {
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState<string | null>(null);
   const [sort, setSort] = useState<ProductSort>("recommended");
-  const [selected, setSelected] = useState<Product | null>(null);
   const heading = useRef<HTMLHeadingElement>(null);
   const previousCategory = useRef(category);
   async function load() {
@@ -40,7 +38,6 @@ export function Storefront() {
     setQuery("");
     setSort("recommended");
     setCategory(id);
-    setSelected(null);
   }
   const filtered = filterProducts(catalog?.products || [], query, category || "", sort);
   const categories = [...(catalog?.categories || [])].sort((a,b) => a.sortOrder - b.sortOrder);
@@ -66,7 +63,7 @@ export function Storefront() {
             <button className="category-back" onClick={() => chooseCategory(null)}><ArrowLeft size={17} /> กลับไปหมวดหมู่</button>
             <span className="bio-kicker"><Sparkles size={14} /> ของที่คัดให้คุณ</span>
             <h1 ref={heading} tabIndex={-1}>{activeCategory?.name || "สินค้าทั้งหมด"}</h1>
-            <p>เลือกชิ้นที่ชอบ แล้วกดดูรายละเอียดได้เลยค่ะ</p>
+            <p>เลือกชิ้นที่ชอบ กดดูข้อมูลเพิ่มเติมที่ Shopee ได้เลยค่ะ</p>
           </div>
         )}
         {catalog?.demo && <p className="demo-notice" role="status">คุณกำลังดูสินค้าตัวอย่าง · สินค้าเหล่านี้ยังไม่มีลิงก์ซื้อ</p>}
@@ -103,12 +100,11 @@ export function Storefront() {
               <div className="search-field"><Search size={18} /><input type="search" aria-label="ค้นหาสินค้า" placeholder="ค้นหาสินค้าในหมวดนี้…" value={query} onChange={e => setQuery(e.target.value)} /></div>
               <div className="bio-sort-row"><span aria-live="polite">{filtered.length} สินค้า</span><label>เรียงตาม<select aria-label="เรียงสินค้า" value={sort} onChange={e => setSort(e.target.value as ProductSort)}><option value="recommended">แอดมินแนะนำก่อน</option><option value="price-asc">ราคา: ต่ำไปสูง</option><option value="price-desc">ราคา: สูงไปต่ำ</option></select></label></div>
             </div>
-            {filtered.length ? <div className="product-grid">{filtered.map(p => <ProductCard key={p.id} product={p} category={catalog?.categories.find(c => c.id === p.categoryId)?.name} onSelect={() => setSelected(p)} />)}</div> : <div className="center-state"><CatMark /><h2>{query ? "ไม่พบสินค้าที่ตรงกัน" : "กำลังคัดของดี ๆ มาให้"}</h2><p>{query ? "ลองเปลี่ยนคำค้น หรือกลับไปเลือกหมวดอื่นนะคะ" : "แวะกลับมาดูสินค้าใหม่ได้เร็ว ๆ นี้"}</p>{query && <button className="text-button" onClick={() => setQuery("")}>ล้างคำค้น</button>}</div>}
+            {filtered.length ? <div className="product-grid">{filtered.map(p => <ProductCard key={p.id} product={p} category={catalog?.categories.find(c => c.id === p.categoryId)?.name} />)}</div> : <div className="center-state"><CatMark /><h2>{query ? "ไม่พบสินค้าที่ตรงกัน" : "กำลังคัดของดี ๆ มาให้"}</h2><p>{query ? "ลองเปลี่ยนคำค้น หรือกลับไปเลือกหมวดอื่นนะคะ" : "แวะกลับมาดูสินค้าใหม่ได้เร็ว ๆ นี้"}</p>{query && <button className="text-button" onClick={() => setQuery("")}>ล้างคำค้น</button>}</div>}
           </section>
         )}
       </main>
       <footer className="bio-footer"><CatMark /><p>{settings.introduction}</p><small>{settings.affiliateDisclosure}</small><span>© {new Date().getFullYear()} {settings.siteName} · Made with a little meow ♡</span></footer>
-      {selected && <ProductDetails product={selected} onClose={() => setSelected(null)} />}
     </div>
   );
 }

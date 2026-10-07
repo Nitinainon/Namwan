@@ -147,7 +147,7 @@ export default function Dashboard({
         <div className="brand">
           <CatMark />
           <span>
-            {catalog?.settings.siteName || "น้ำหวานคัดให้"}
+            {catalog?.settings.siteName || "แม่น้ำหวานลูก 4"}
             <small>พื้นที่จัดการร้าน · ADMIN ONLY</small>
           </span>
         </div>
