@@ -4,6 +4,7 @@ import {
   isAffiliateUrl,
   validateProduct,
   validateImage,
+  isImageUrl,
   filterProducts,
 } from "../src/lib/validation";
 test("affiliate URL requires exact trusted HTTPS host and preserves tracking", () => {
@@ -17,6 +18,12 @@ test("affiliate URL requires exact trusted HTTPS host and preserves tracking", (
     "https://example.com",
   ])
     expect(isAffiliateUrl(bad)).toBe(false);
+});
+test("editable starter products can omit a purchase link and retain bundled sample images", () => {
+  expect(validateProduct({ name: "สินค้าตัวอย่าง", affiliateUrl: "", imageUrl: "/images/mug.svg" })).toEqual({});
+  expect(isImageUrl("/images/notebook.svg")).toBe(true);
+  expect(isImageUrl("//evil.test/image.png")).toBe(false);
+  expect(isImageUrl("/images/../../admin")).toBe(false);
 });
 test("recommended items precede others while price sorting keeps unknown prices last", () => {
   const products = demoCatalog.products.slice(0, 4).map((p, i) => ({ ...p, featured: i === 1, price: [100, 300, 0, null][i], sortOrder: i }));

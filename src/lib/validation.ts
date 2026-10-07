@@ -16,6 +16,7 @@ export function isAffiliateUrl(value: string): boolean {
   }
 }
 export function isImageUrl(value: string): boolean {
+  if (/^\/images\/(mug|tote|bowl|mirror|lamp|notebook)\.svg$/.test(value)) return true;
   try {
     const u = new URL(value);
     return u.protocol === "https:" && !u.username && !u.password;
@@ -29,7 +30,7 @@ export function validateProduct(
   const errors: Record<string, string> = {};
   if (!input.name?.trim() || input.name.trim().length > 200)
     errors.name = "กรอกชื่อสินค้า 1–200 ตัวอักษร";
-  if (!isAffiliateUrl(input.affiliateUrl || ""))
+  if (input.affiliateUrl && !isAffiliateUrl(input.affiliateUrl))
     errors.affiliateUrl = "ใช้ลิงก์ HTTPS ของ Shopee หรือลิงก์สั้น Shopee";
   if (
     input.price != null &&

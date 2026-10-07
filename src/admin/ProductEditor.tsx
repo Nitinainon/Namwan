@@ -143,7 +143,7 @@ export function ProductEditor({
             {fieldError("price")}
           </label>
           <label className="full">
-            ลิงก์ affiliate Shopee
+            ลิงก์ affiliate Shopee (เพิ่มภายหลังได้)
             <input
               aria-label="ลิงก์ affiliate Shopee"
               type="url"
@@ -157,7 +157,7 @@ export function ProductEditor({
             ลิงก์รูปภาพ
             <input
               aria-label="ลิงก์รูปภาพ"
-              type="url"
+              type="text"
               value={form.imageUrl}
               placeholder="https://… หรืออัปโหลดรูปด้านบน"
               onChange={(e) => set("imageUrl", e.target.value)}

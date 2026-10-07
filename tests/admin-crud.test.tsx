@@ -29,6 +29,11 @@ beforeEach(() => {
   vi.clearAllMocks();
   api.loadAdminCatalog.mockResolvedValue({ ...demoCatalog, demo: false });
 });
+test("starter product image paths do not block the admin from saving edits", () => {
+  render(<ProductEditor product={demoCatalog.products[0]} categories={demoCatalog.categories} onSaved={() => {}} onCancel={() => {}} />);
+  const image = screen.getByLabelText("ลิงก์รูปภาพ") as HTMLInputElement;
+  expect(image.checkValidity()).toBe(true);
+});
 test("failed product save keeps form and submits original revision", async () => {
   const original = {
     ...demoCatalog.products[0],

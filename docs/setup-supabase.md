@@ -6,7 +6,9 @@
 
 เปิดโปรเจกต์ใน Supabase Dashboard → SQL Editor → New query คัดลอกทั้งหมดจาก `supabase/migrations/202610070001_catalog.sql` แล้วกด Run เพียงครั้งเดียว ไฟล์ทำงานใน transaction หากมีข้อผิดพลาดการติดตั้งจะ rollback
 
-จะได้ตาราง `products`, `categories`, `site_settings` และตารางรายชื่อแอดมิน `private.admin_users` พร้อม RLS และ bucket `product-images` เริ่มด้วยข้อมูลหน้าร้าน แต่ไม่มีสินค้า affiliate จริง รอเจ้าของเพิ่มสินค้าเอง
+จะได้ตาราง `products`, `categories`, `site_settings` และตารางรายชื่อแอดมิน `private.admin_users` พร้อม RLS และ bucket `product-images` จากนั้นรัน `supabase/seed.sql` บนร้านว่างเพื่อเพิ่ม 4 หมวดหมู่และ 6 สินค้าตัวอย่างพร้อมรูป แอดมินแก้ไขหรือลบได้จากหลังบ้าน ไม่ใช่สินค้า affiliate จริง จึงยังไม่มีลิงก์ซื้อ ปุ่มซื้อจะทำงานเมื่อแอดมินใส่ลิงก์ Shopee
+
+ไฟล์ seed ปฏิเสธการทำงานเมื่อมีหมวดหมู่หรือสินค้าอยู่แล้ว เพื่อไม่ทับข้อมูลที่แอดมินจัดไว้
 
 หากมีตารางชื่อเดียวกันอยู่แล้ว อย่าลบเพื่อรันซ้ำ ให้ตรวจและทำ migration ต่อจากสภาพจริงก่อน
 
