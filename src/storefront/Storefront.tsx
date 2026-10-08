@@ -48,8 +48,8 @@ export function Storefront() {
   const referenceMode = catalog?.products.some(p => p.imageUrl.includes("/images/reference-"));
   const heroCategory = isStory ? {name:"พิกัดสินค้าในสตอรี่",id:storyCategory?.id} : activeCategory;
   useEffect(() => {
-    document.title = `${activeCategory?.name || settings.siteName} · ของน่ารักที่อยากบอกต่อ`;
-  }, [settings.siteName, activeCategory?.name]);
+    document.title = `${isStory ? "พิกัดสินค้าในสตอรี่" : activeCategory?.name || settings.siteName} · ของน่ารักที่อยากบอกต่อ`;
+  }, [settings.siteName, activeCategory?.name, isStory]);
   function chooseCategory(id: string) {
     setQuery(""); setSort("recommended"); setSavedOnly(false); setCategory(id);
   }
@@ -71,9 +71,9 @@ export function Storefront() {
         <ReferenceArt className="reference-family" region={[326, 84, 506, 288]} label="แม่แมวกับลูกแมวทั้งสี่ต้อนรับเข้าร้าน" />
         <div className="boutique-header">
           {heroCategory ? <div className="reference-category-intro">
-            <button className="reference-back" onClick={() => { if(isStory) { window.location.assign("/"); return; } chooseCategory(""); categoryHeading.current?.scrollIntoView?.({behavior:"smooth",block:"start"}); }}><ArrowLeft /> กลับไปหมวดหมู่</button>
+            <button className="reference-back" onClick={() => { if(isStory) { window.location.assign("/"); return; } chooseCategory(""); categoryHeading.current?.scrollIntoView?.({behavior:"smooth",block:"start"}); }}><ArrowLeft /> {isStory ? "กลับหน้าหลัก" : "กลับไปหมวดหมู่"}</button>
             <h1>{heroCategory.name} <PawPrint fill="currentColor" /></h1>
-            <p>สินค้าสำหรับน้องแมว คัดมาให้แล้ว<br />ใช้งานดี น่ารัก และคุณภาพดี</p>
+            <p>{isStory ? "รวมพิกัดของที่ลงในสตอรี่" : "สินค้าสำหรับน้องแมว คัดมาให้แล้ว"}<br />{isStory ? "กดการ์ดเพื่อดูสินค้าได้เลยค่ะ" : "ใช้งานดี น่ารัก และคุณภาพดี"}</p>
           </div> :
           <a className="boutique-brand" href="/" aria-label={`${settings.siteName} หน้าหลัก`}>
             <img src="/images/category-kitten.jpg" alt="" />
