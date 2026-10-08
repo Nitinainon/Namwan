@@ -60,7 +60,7 @@ test("storefront displays the renamed brand", async () => {
 });
 test("category offers ascending and descending price and recommended sorting", async () => {
   render(<Storefront />);
-  fireEvent.click(await screen.findByRole("button", { name: /ของน่ารัก/ }));
+  fireEvent.click(await screen.findByRole("button", { name: /^ของน่ารัก / }));
   const names = () => screen.getAllByRole("heading", { level: 3 }).map((h) => h.textContent);
   expect(names()).toEqual(["กระเป๋าผ้าเพื่อนแมว", "สมุดบันทึกเรื่องเล็ก ๆ"]);
   fireEvent.change(screen.getByRole("combobox", { name: "เรียงสินค้า" }), { target: { value: "price-asc" } });

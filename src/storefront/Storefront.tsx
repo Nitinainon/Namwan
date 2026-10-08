@@ -43,18 +43,19 @@ export function Storefront() {
   const categories = [...(catalog?.categories || [])].sort((a,b) => a.sortOrder - b.sortOrder);
   return (
     <div className="bio-store">
-      <header className="bio-header">
+      <header className={`bio-header${category === null ? " bio-header-home" : ""}`}>
         <a className="brand" href="/" aria-label={`${settings.siteName} หน้าหลัก`}>
           <CatMark />
           <span>{settings.siteName}<small>คัดด้วยใจ พร้อมผู้ช่วยตัวน้อย ♡</small></span>
         </a>
-        <span className="bio-header-heart" aria-hidden="true"><Heart size={21} /></span>
+        <span className="bio-header-heart" aria-hidden="true"><PawPrint size={21} /></span>
       </header>
+      {category === null && <div className="cat-family-banner"><img src="/images/cat-family.jpg" alt="แม่แมวกับลูกแมวทั้งสี่ต้อนรับเข้าร้าน" fetchPriority="high" /><span className="family-caption"><Heart size={12} fill="currentColor" /> ของน่ารัก จากบ้านของเรา</span></div>}
       <main className="bio-main" id="collection">
         {category === null ? (
           <div className="bio-welcome">
-            <span className="bio-kicker"><PawPrint size={14} /> LITTLE FINDS, LOTS OF LOVE</span>
-            <h1 ref={heading} tabIndex={-1}>วันนี้อยากได้อะไรดี <span>♡</span></h1>
+            <span className="bio-kicker"><PawPrint size={14} /> คัดด้วยรัก จากแม่และผู้ช่วยทั้ง 4</span>
+            <h1 ref={heading} tabIndex={-1}>เลือกหมวดที่ถูกใจ <span>♡</span></h1>
             <p>{settings.tagline}</p>
             {settings.bannerUrl && <img className="bio-banner" src={settings.bannerUrl} alt="แบนเนอร์ร้าน" />}
           </div>
@@ -78,20 +79,20 @@ export function Storefront() {
           </div>
         ) : category === null ? (
           <section className="category-menu" aria-label="เลือกหมวดหมู่">
-            <div className="category-menu-caption"><span>เลือกหมวดที่คุณชอบ</span><span>{categories.length} หมวดหมู่</span></div>
+            <div className="category-menu-caption"><span><PawPrint size={17} /> หมวดหมู่ของเรา</span><span>{categories.length} หมวดหมู่</span></div>
             <div className="category-rows">
               {categories.map((c, i) => {
                 const Icon = /แมว/.test(c.name) ? Cat : /สัตว์|หมา|สุนัข/.test(c.name) ? PawPrint : icons[i % icons.length];
                 const count = catalog?.products.filter(p => p.published && p.categoryId === c.id).length || 0;
                 return <button key={c.id} className={`category-row category-tone-${i % 3}`} onClick={() => chooseCategory(c.id)}>
-                  <span className="category-row-icon"><Icon size={27} strokeWidth={1.6} /></span>
+                  <span className="category-row-icon"><img src="/images/category-kitten.jpg" alt="" loading="lazy" /><span className="category-icon-badge"><Icon size={16} strokeWidth={1.8} /></span></span>
                   <span className="category-row-copy"><strong>{c.name}</strong><small>{count} ชิ้นที่คัดให้ · แวะดูความน่ารัก</small></span>
                   <ChevronRight size={20} />
                 </button>;
               })}
               {!categories.length && <div className="center-state"><CatMark /><h2>กำลังเตรียมหมวดน่ารัก ๆ</h2><p>แวะกลับมาใหม่ได้เร็ว ๆ นี้ค่ะ</p></div>}
             </div>
-            <button className="browse-all" onClick={() => chooseCategory("")}><Sparkles size={15} /> ดูสินค้าทั้งหมด <ChevronRight size={16} /></button>
+            <button className="browse-all" onClick={() => chooseCategory("")}><span className="browse-all-icon"><Sparkles size={23} /></span><span><strong>รวมของน่ารักที่แม่คัดให้</strong><small>ดูสินค้าทั้งหมด</small></span><ChevronRight size={20} /></button>
             <p className="category-menu-note"><Heart size={13} /> ของใช้ของคุณ และของรักของเจ้าตัวเล็ก</p>
           </section>
         ) : (
@@ -108,3 +109,4 @@ export function Storefront() {
     </div>
   );
 }
+
