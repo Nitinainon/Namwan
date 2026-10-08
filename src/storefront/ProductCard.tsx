@@ -35,7 +35,7 @@ export const priceLabel = (price: number | null) =>
   price === null
     ? "ดูราคาที่ Shopee"
     : `฿${new Intl.NumberFormat("th-TH", { maximumFractionDigits: 2 }).format(price)}`;
-function ShopeeBag() {
+export function ShopeeBag() {
   return <svg className="shopee-bag-icon" viewBox="0 0 28 32" aria-hidden="true"><path fill="currentColor" d="M3 9h22l-1.5 21h-19Z" /><path d="M8 10V7a6 6 0 0 1 12 0v3" fill="none" stroke="currentColor" strokeWidth="2" /><text x="14" y="25" textAnchor="middle" fill="#ff511e" fontFamily="Arial, sans-serif" fontSize="19">S</text></svg>;
 }
 export function ProductCard({

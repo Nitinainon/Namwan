@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from "react";
-import { Search, Heart, Sparkles, ChevronRight, ArrowLeft, RotateCw, PawPrint, Star, ShoppingBag } from "lucide-react";
+import { Search, Heart, Sparkles, ChevronRight, ArrowLeft, RotateCw, PawPrint, Star } from "lucide-react";
 import { loadCatalog } from "../lib/catalog";
 import { demoCatalog } from "../demo/catalog";
 import { filterProducts, errorMessage, type ProductSort } from "../lib/validation";
 import type { Catalog } from "../lib/types";
 import { CatMark } from "../components/CatMark";
-import { ProductCard } from "./ProductCard";
+import { ProductCard, ShopeeBag } from "./ProductCard";
 import { ReferenceArt, referenceCategory } from "../components/ReferenceArt";
 
 const SAVED_KEY = "namwan-saved-products";
@@ -25,6 +25,7 @@ export function Storefront() {
   const [saved, setSaved] = useState<string[]>(() => readSaved());
   const [savedOnly, setSavedOnly] = useState(false);
   const heading = useRef<HTMLHeadingElement>(null);
+  const categoryHeading = useRef<HTMLElement>(null);
   async function load() {
     setLoading(true); setError("");
     try { setCatalog(await loadCatalog()); }
@@ -67,7 +68,7 @@ export function Storefront() {
         <ReferenceArt className="reference-family" region={[326, 84, 506, 288]} label="แม่แมวกับลูกแมวทั้งสี่ต้อนรับเข้าร้าน" />
         <div className="boutique-header">
           {heroCategory ? <div className="reference-category-intro">
-            <button className="reference-back" onClick={() => chooseCategory("")}><ArrowLeft /> กลับไปหมวดหมู่</button>
+            <button className="reference-back" onClick={() => { chooseCategory(""); categoryHeading.current?.scrollIntoView?.({behavior:"smooth",block:"start"}); }}><ArrowLeft /> กลับไปหมวดหมู่</button>
             <h1>{heroCategory.name} <PawPrint fill="currentColor" /></h1>
             <p>สินค้าสำหรับน้องแมว คัดมาให้แล้ว<br />ใช้งานดี น่ารัก และคุณภาพดี</p>
           </div> :
@@ -75,19 +76,19 @@ export function Storefront() {
             <img src="/images/category-kitten.jpg" alt="" />
             <span><h1>{settings.siteName}</h1><small>คัดด้วยใจ พร้อมผู้ช่วยตัวน้อย ♡</small></span>
           </a>}
-          {!heroCategory && <button className={`saved-toggle${savedOnly ? " active" : ""}`} aria-label={`ดูสินค้าที่บันทึก ${savedCount} ชิ้น`} aria-pressed={savedOnly} onClick={() => { setSavedOnly(!savedOnly); setCategory(""); setQuery(""); heading.current?.focus(); }}><Heart fill={savedOnly ? "currentColor" : "none"} />{savedCount > 0 && <span>{savedCount}</span>}</button>}
+          {<button className={`saved-toggle${savedOnly ? " active" : ""}`} aria-label={`ดูสินค้าที่บันทึก ${savedCount} ชิ้น`} aria-pressed={savedOnly} onClick={() => { setSavedOnly(!savedOnly); setCategory(""); setQuery(""); heading.current?.focus(); }}><Heart fill={savedOnly ? "currentColor" : "none"} />{savedCount > 0 && <span>{savedCount}</span>}</button>}
         </div>
       </header>
       <main className="boutique-main" id="collection">
         <div className="boutique-search-row">
-          <div className="boutique-search"><Search /><input type="search" aria-label="ค้นหาสินค้า" placeholder={activeCategory ? "ค้นหาสินค้าในหมวดนี้..." : "ค้นหาสินค้าในร้านนี้..."} value={query} onChange={e => setQuery(e.target.value)} />{query && <button onClick={() => setQuery("")} aria-label="ล้างคำค้น">×</button>}</div>
+          <div className="boutique-search"><Search /><input type="search" aria-label="ค้นหาสินค้า" placeholder={heroCategory ? "ค้นหาสินค้าในหมวดนี้..." : "ค้นหาสินค้าในร้านนี้..."} value={query} onChange={e => setQuery(e.target.value)} />{query && <button onClick={() => setQuery("")} aria-label="ล้างคำค้น">×</button>}</div>
           <span className="search-paw" aria-hidden="true"><PawPrint fill="currentColor" /></span>
         </div>
         {catalog?.demo && <p className="demo-notice" role="status">คุณกำลังดูสินค้าตัวอย่าง · สินค้าเหล่านี้ยังไม่มีลิงก์ซื้อ</p>}
         {loading ? <div className="center-state" role="status">กำลังคัดของน่ารักมาให้…</div> : error ? (
           <div className="error-state" role="alert"><CatMark /><h2>ยังเปิดคอลเลกชันไม่ได้</h2><p>กำลังเตรียมร้านหรือการเชื่อมต่อมีปัญหา ลองใหม่อีกครั้งได้ค่ะ</p><div className="button-row"><button className="button secondary" onClick={() => void load()}><RotateCw size={16} /> ลองอีกครั้ง</button><button className="button primary" onClick={() => { setCatalog(demoCatalog); setError(""); }}>ดูตัวอย่างหน้าร้าน</button></div></div>
         ) : <>
-          <section className="boutique-categories" aria-label="เลือกหมวดหมู่">
+          <section ref={categoryHeading} className="boutique-categories" aria-label="เลือกหมวดหมู่">
             <div className="boutique-section-heading"><h2><PawPrint fill="currentColor" /> เลือกหมวดหมู่</h2><button onClick={showAllProducts}>ดูทั้งหมด <ChevronRight size={17} /></button></div>
             <div className="category-rail">
               {categories.map((c, i) => <button key={c.id} className={`category-tile tone-${i % 4}${(category || (referenceMode ? heroCategory?.id : "")) === c.id ? " selected" : ""}`} aria-pressed={(category || (referenceMode ? heroCategory?.id : "")) === c.id} onClick={() => chooseCategory(c.id)}>
@@ -98,7 +99,7 @@ export function Storefront() {
           </section>
           {settings.bannerUrl ? <img className="custom-shop-banner" src={settings.bannerUrl} alt="แบนเนอร์ร้าน" /> : <button className="story-banner" onClick={showAllProducts}>
             <ReferenceArt className="reference-story-cat" region={[492, 727, 170, 127]} />
-            <span className="story-bag"><ShoppingBag /><b>S</b></span><span className="story-copy"><strong>พิกัดสินค้าใน <em>Story <Sparkles /></em></strong><small>{settings.tagline}</small></span><span className="story-action">ดูทั้งหมด <ChevronRight /></span>
+              <span className="story-bag"><ShopeeBag /></span><span className="story-copy"><strong>พิกัดสินค้าใน <em>Story <Sparkles /></em></strong><small>{settings.tagline}</small></span><span className="story-action">ดูทั้งหมด <ChevronRight /></span>
           </button>}
           <section className="boutique-products" aria-label="สินค้าในหมวดหมู่">
             {savedOnly && <button className="boutique-back" onClick={() => chooseCategory("")}><ArrowLeft size={16} /> กลับไปหมวดหมู่</button>}

@@ -2031,3 +2031,11 @@ textarea {
 .exact-reference .product-section-heading h2 { font-size:clamp(18px,3.8cqw,30px); }
 .exact-reference .product-section-heading select { font-size:clamp(10px,2.5cqw,20px); }
 .exact-reference .boutique-footer { padding-top:14px; }
+.exact-reference .story-bag .shopee-bag-icon { width:7cqw; height:9cqw; }
+@media(max-width:440px) {
+ .exact-reference .product-shop-link, .exact-reference .product-unavailable .product-shop-link { min-height:38px; font-size:10px; gap:2px; padding:4px 3px; }
+ .exact-reference .product-shop-link .shopee-bag-icon { min-width:14px; min-height:20px; }
+ .exact-reference .product-shop-link svg:last-child { min-width:10px; min-height:14px; }
+ .exact-reference .story-copy > strong { font-size:4cqw; }
+ .exact-reference .story-copy > small { font-size:2.4cqw; }
+}
