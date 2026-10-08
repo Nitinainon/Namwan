@@ -72,11 +72,11 @@ test("favorites preserve changes from another tab and synchronize removals", asy
   fireEvent(window, new StorageEvent("storage", { key: "namwan-saved-products" }));
   expect(screen.getByText("ยังไม่มีสินค้าที่บันทึก")).toBeInTheDocument();
 });
-test("product row shows description and recommendation and links directly to Shopee", async () => {
+test("compact product card shows the name without extra copy and links directly to Shopee", async () => {
   render(<Storefront />);
   fireEvent.click(await screen.findByRole("button", { name: /บ้าน & ไลฟ์สไตล์/ }));
-  expect(screen.getByText("ตัวอย่างสินค้า — แทนที่ด้วยสินค้าที่คุณแนะนำได้ในหน้าแอดมิน")).toBeInTheDocument();
-  expect(screen.getByText("จิบกาแฟแล้วใจฟู สีละมุนเข้ากับทุกมุมบ้าน")).toBeInTheDocument();
+  expect(screen.queryByText("ตัวอย่างสินค้า — แทนที่ด้วยสินค้าที่คุณแนะนำได้ในหน้าแอดมิน")).not.toBeInTheDocument();
+  expect(screen.queryByText("จิบกาแฟแล้วใจฟู สีละมุนเข้ากับทุกมุมบ้าน")).not.toBeInTheDocument();
   const link = screen.getByRole("link", { name: "ดูใน Shopee — ดูข้อมูลเพิ่มเติม: แก้วเซรามิกสำหรับเช้าที่สดใส" });
   expect(link).toHaveAttribute(
     "href",

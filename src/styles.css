@@ -1966,10 +1966,29 @@ textarea {
  .reference-store .card-more p { font-size:10px; }
  .reference-store .product-shop-link { font-size:10px; padding:6px 4px; min-height:38px; gap:2px; border-radius:8px; }
  .reference-store .product-shop-link svg { width:12px; }
- .reference-store .product-shop-link svg:last-child { display:none; }
+ .reference-store .product-shop-link svg:last-child { display:block; }
  .reference-store .card-heart { width:25px; height:25px; top:3px; right:3px; }
  .reference-store .card-heart svg { width:16px; }
  .reference-store .card-featured { font-size:8px; top:auto; bottom:0; border-radius:0 8px 0 0; padding:4px; }
  .reference-store .card-featured svg { width:10px; }
  .reference-store .product-unavailable small { font-size:7px; }
+}
+
+/* Compact product actions follow the supplied orange Shopee reference. */
+.reference-store .product-shop-link,
+.reference-store .product-unavailable .product-shop-link {
+ background:linear-gradient(110deg,#ff4718,#ff642d);
+ border:1px solid #ff7445; color:#fff; text-shadow:none;
+ gap:5px; padding:6px 10px;
+}
+.reference-store .product-shop-link:hover { background:linear-gradient(110deg,#ed3b0c,#ff5722); }
+.reference-store .product-shop-link svg { flex-shrink:0; }
+.reference-store .product-shop-link .shopee-bag-icon { width:26px; height:30px; }
+.reference-store .product-shop-link > span { flex:1; text-align:left; white-space:nowrap; }
+.reference-store .product-copy h3 { min-height:2.7em; margin-bottom:7px; }
+.reference-store .product-unavailable small { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap; }
+@media(max-width:440px) {
+ .reference-store .product-shop-link, .reference-store .product-unavailable .product-shop-link { padding:5px 4px; gap:3px; font-size:10px; }
+ .reference-store .product-shop-link .shopee-bag-icon { width:17px; height:22px; }
+ .reference-store .product-shop-link svg:last-child { width:12px; height:18px; }
 }

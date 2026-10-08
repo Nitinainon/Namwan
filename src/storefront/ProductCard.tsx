@@ -1,4 +1,4 @@
-import { ArrowUpRight, Heart, ImageOff, ShoppingBag, Star } from "lucide-react";
+import { ChevronRight, Heart, ImageOff, Star } from "lucide-react";
 import type { Product } from "../lib/types";
 import { isAffiliateUrl } from "../lib/validation";
 import { useState } from "react";
@@ -28,9 +28,11 @@ export const priceLabel = (price: number | null) =>
   price === null
     ? "ดูราคาที่ Shopee"
     : `฿${new Intl.NumberFormat("th-TH", { maximumFractionDigits: 2 }).format(price)}`;
+function ShopeeBag() {
+  return <svg className="shopee-bag-icon" viewBox="0 0 28 32" aria-hidden="true"><path fill="currentColor" d="M3 9h22l-1.5 21h-19Z" /><path d="M8 10V7a6 6 0 0 1 12 0v3" fill="none" stroke="currentColor" strokeWidth="2" /><text x="14" y="25" textAnchor="middle" fill="#ff511e" fontFamily="Arial, sans-serif" fontSize="19">S</text></svg>;
+}
 export function ProductCard({
   product,
-  category,
   saved,
   onToggleSaved,
 }: {
@@ -49,10 +51,8 @@ export function ProductCard({
         </div>
         <div className="product-copy">
           <h3>{product.name}</h3>
-          {(product.recommendation || product.description) && <p className="row-description">{product.recommendation || product.description}</p>}
-          <details className="card-more"><summary>{priceLabel(product.price)} · อ่านเพิ่มเติม</summary><span>{category || "ของที่คัดให้"}</span>{product.description && <p>{product.description}</p>}</details>
           <div className="product-price">
-            {isAffiliateUrl(product.affiliateUrl) ? <a className="product-shop-link" href={product.affiliateUrl} target="_blank" rel="sponsored noopener noreferrer" aria-label={`ดูใน Shopee — ดูข้อมูลเพิ่มเติม: ${product.name}`}><ShoppingBag size={19} /> ดูใน Shopee <ArrowUpRight size={18} /></a> : <div className="product-unavailable"><button className="product-shop-link" disabled aria-label="ดูใน Shopee — ดูข้อมูลเพิ่มเติม"><ShoppingBag size={19} /> ดูใน Shopee <ArrowUpRight size={18} /></button><small>สินค้าตัวอย่าง · ยังไม่มีลิงก์ซื้อ</small></div>}
+            {isAffiliateUrl(product.affiliateUrl) ? <a className="product-shop-link" href={product.affiliateUrl} target="_blank" rel="sponsored noopener noreferrer" aria-label={`ดูใน Shopee — ดูข้อมูลเพิ่มเติม: ${product.name}`}><ShopeeBag /> <span>ดูใน Shopee</span> <ChevronRight size={22} /></a> : <div className="product-unavailable"><button className="product-shop-link" disabled title="ยังไม่มีลิงก์ซื้อ" aria-label="ดูใน Shopee — ดูข้อมูลเพิ่มเติม (ยังไม่มีลิงก์ซื้อ)"><ShopeeBag /> <span>ดูใน Shopee</span> <ChevronRight size={22} /></button><small>สินค้าตัวอย่าง · ยังไม่มีลิงก์ซื้อ</small></div>}
           </div>
         </div>
       </div>
