@@ -26,6 +26,7 @@ import { ProductImage, priceLabel } from "../storefront/ProductCard";
 import { ProductEditor } from "./ProductEditor";
 import { CategoryEditor } from "./CategoryEditor";
 import { SettingsEditor } from "./SettingsEditor";
+import { StoryManager } from "./StoryManager";
 type Editor =
   | { kind: "product"; product?: Product }
   | { kind: "category"; category?: Category }
@@ -37,7 +38,7 @@ export default function Dashboard({
 }) {
   const [catalog, setCatalog] = useState<Catalog | null>(null),
     [loading, setLoading] = useState(true),
-    [tab, setTab] = useState<"products" | "categories" | "settings">(
+    [tab, setTab] = useState<"products" | "categories" | "settings" | "stories">(
       "products",
     ),
     [query, setQuery] = useState(""),
@@ -210,6 +211,7 @@ export default function Dashboard({
       <div className="admin-tabs" role="group" aria-label="เลือกหน้าจัดการ">
         {[
           { id: "products" as const, icon: Package, label: "สินค้า" },
+          { id: "stories" as const, icon: Heart, label: "สตอรี่" },
           { id: "categories" as const, icon: Tags, label: "หมวดหมู่" },
           { id: "settings" as const, icon: Settings, label: "ข้อมูลหน้าร้าน" },
         ].map(({ id, icon: Icon, label }) => (
@@ -245,7 +247,7 @@ export default function Dashboard({
             ตรวจการติดตั้งตารางและสิทธิ์แอดมินใน Supabase แล้วกดโหลดข้อมูลล่าสุด
           </p>
         </div>
-      ) : tab === "products" ? (
+      ) : tab === "stories" ? <StoryManager catalog={catalog} reload={load} /> : tab === "products" ? (
         <>
           <div className="admin-toolbar">
             <div className="search-field">

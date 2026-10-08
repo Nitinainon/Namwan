@@ -88,7 +88,7 @@ test("compact product card shows the name without extra copy and links directly 
 });
 test("storefront displays the renamed brand", async () => {
   render(<Storefront />);
-  expect(await screen.findByRole("link", { name: "แม่น้ำหวานลูก 4 หน้าหลัก" })).toBeInTheDocument();
+  expect(await screen.findByRole("link", { name: "แม่น้ำหวานลูกสี่ หน้าหลัก" })).toBeInTheDocument();
 });
 test("category offers ascending and descending price and recommended sorting", async () => {
   render(<Storefront />);
@@ -99,4 +99,20 @@ test("category offers ascending and descending price and recommended sorting", a
   expect(names()).toEqual(["สมุดบันทึกเรื่องเล็ก ๆ", "กระเป๋าผ้าเพื่อนแมว"]);
   fireEvent.change(screen.getByRole("combobox", { name: "เรียงสินค้า" }), { target: { value: "price-desc" } });
   expect(names()).toEqual(["กระเป๋าผ้าเพื่อนแมว", "สมุดบันทึกเรื่องเล็ก ๆ"]);
+});
+
+test("story banner opens a separate tab and story page does not show ordinary store products", async () => {
+  const view = render(<Storefront />);
+  const banner = await screen.findByRole("link", {name:/พิกัดสินค้าใน/});
+  expect(banner).toHaveAttribute("href", "/stories");
+  expect(banner).toHaveAttribute("target", "_blank");
+  expect(screen.getByRole("heading", {level:1})).toHaveTextContent("แม่น้ำหวานลูกสี่");
+  view.unmount();
+  window.history.replaceState({}, "", "/stories");
+  try {
+    render(<Storefront />);
+    expect(await screen.findByRole("heading", {name:"พิกัดจากสตอรี่"})).toBeInTheDocument();
+    expect(screen.queryByRole("heading", {name:"แก้วเซรามิกสำหรับเช้าที่สดใส"})).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", {name:/บ้าน & ไลฟ์สไตล์/})).not.toBeInTheDocument();
+  } finally { window.history.replaceState({}, "", "/"); }
 });

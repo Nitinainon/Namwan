@@ -18,18 +18,20 @@ const blank: ProductInput = {
 };
 export function ProductEditor({
   product,
+  defaultCategoryId,
   categories,
   onSaved,
   onCancel,
   onBusyChange,
 }: {
   product?: Product;
+  defaultCategoryId?: string;
   categories: Category[];
   onSaved: (p: Product) => void;
   onCancel: () => void;
   onBusyChange?: (busy: boolean) => void;
 }) {
-  const [form, setForm] = useState<ProductInput>(product || blank),
+  const [form, setForm] = useState<ProductInput>(product || {...blank,categoryId:defaultCategoryId || null}),
     [busy, setBusy] = useState(false),
     [uploading, setUploading] = useState(false),
     [error, setError] = useState(""),
