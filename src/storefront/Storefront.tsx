@@ -6,6 +6,7 @@ import { filterProducts, errorMessage, type ProductSort } from "../lib/validatio
 import type { Catalog } from "../lib/types";
 import { CatMark } from "../components/CatMark";
 import { ProductCard } from "./ProductCard";
+import { ReferenceArt, referenceCategory } from "../components/ReferenceArt";
 
 const SAVED_KEY = "namwan-saved-products";
 function readSaved(fallback: string[] = []): string[] {
@@ -13,12 +14,6 @@ function readSaved(fallback: string[] = []): string[] {
     const value: unknown = JSON.parse(localStorage.getItem(SAVED_KEY) || "[]");
     return Array.isArray(value) ? [...new Set(value.filter((id): id is string => typeof id === "string"))] : [];
   } catch { return fallback; }
-}
-function categoryImage(name: string, index: number) {
-  if (/อาหาร|ขนม/.test(name)) return "category-food.jpg";
-  if (/ดูแล|บิวตี้|แฟชั่น/.test(name)) return "category-grooming.jpg";
-  if (/เล่น|น่ารัก/.test(name)) return "category-play.jpg";
-  return ["category-kitten.jpg", "category-grooming.jpg", "category-food.jpg", "category-play.jpg"][index % 4];
 }
 export function Storefront() {
   const [catalog, setCatalog] = useState<Catalog | null>(null);
@@ -65,20 +60,25 @@ export function Storefront() {
   const categories = [...(catalog?.categories || [])].sort((a,b) => a.sortOrder - b.sortOrder);
   const savedCount = catalog?.products.filter(p => p.published && saved.includes(p.id)).length || 0;
   return (
-    <div className="boutique-store">
+    <div className={`boutique-store reference-store${activeCategory ? " category-view" : ""}`}>
       <header className="boutique-hero">
-        <img className="boutique-hero-art" src="/images/boutique-hero.jpg" alt="แม่แมวกับลูกแมวทั้งสี่ต้อนรับเข้าร้าน" fetchPriority="high" />
+        <ReferenceArt className="reference-family" region={[326, 84, 506, 288]} label="แม่แมวกับลูกแมวทั้งสี่ต้อนรับเข้าร้าน" />
         <div className="boutique-header">
+          {activeCategory ? <div className="reference-category-intro">
+            <button className="reference-back" onClick={() => chooseCategory("")}><ArrowLeft /> กลับไปหมวดหมู่</button>
+            <h1>{activeCategory.name} <PawPrint fill="currentColor" /></h1>
+            <p>สินค้าที่แม่คัดมาให้แล้ว<br />ใช้งานดี น่ารัก และคุณภาพดี</p>
+          </div> :
           <a className="boutique-brand" href="/" aria-label={`${settings.siteName} หน้าหลัก`}>
             <img src="/images/category-kitten.jpg" alt="" />
             <span><h1>{settings.siteName}</h1><small>คัดด้วยใจ พร้อมผู้ช่วยตัวน้อย ♡</small></span>
-          </a>
-          <button className={`saved-toggle${savedOnly ? " active" : ""}`} aria-label={`ดูสินค้าที่บันทึก ${savedCount} ชิ้น`} aria-pressed={savedOnly} onClick={() => { setSavedOnly(!savedOnly); setCategory(""); setQuery(""); heading.current?.focus(); }}><Heart fill={savedOnly ? "currentColor" : "none"} />{savedCount > 0 && <span>{savedCount}</span>}</button>
+          </a>}
+          {!activeCategory && <button className={`saved-toggle${savedOnly ? " active" : ""}`} aria-label={`ดูสินค้าที่บันทึก ${savedCount} ชิ้น`} aria-pressed={savedOnly} onClick={() => { setSavedOnly(!savedOnly); setCategory(""); setQuery(""); heading.current?.focus(); }}><Heart fill={savedOnly ? "currentColor" : "none"} />{savedCount > 0 && <span>{savedCount}</span>}</button>}
         </div>
       </header>
       <main className="boutique-main" id="collection">
         <div className="boutique-search-row">
-          <div className="boutique-search"><Search /><input type="search" aria-label="ค้นหาสินค้า" placeholder="ค้นหาสินค้าในร้านนี้..." value={query} onChange={e => setQuery(e.target.value)} />{query && <button onClick={() => setQuery("")} aria-label="ล้างคำค้น">×</button>}</div>
+          <div className="boutique-search"><Search /><input type="search" aria-label="ค้นหาสินค้า" placeholder={activeCategory ? "ค้นหาสินค้าในหมวดนี้..." : "ค้นหาสินค้าในร้านนี้..."} value={query} onChange={e => setQuery(e.target.value)} />{query && <button onClick={() => setQuery("")} aria-label="ล้างคำค้น">×</button>}</div>
           <span className="search-paw" aria-hidden="true"><PawPrint fill="currentColor" /></span>
         </div>
         {catalog?.demo && <p className="demo-notice" role="status">คุณกำลังดูสินค้าตัวอย่าง · สินค้าเหล่านี้ยังไม่มีลิงก์ซื้อ</p>}
@@ -89,17 +89,18 @@ export function Storefront() {
             <div className="boutique-section-heading"><h2><PawPrint fill="currentColor" /> เลือกหมวดหมู่</h2><button onClick={showAllProducts}>ดูทั้งหมด <ChevronRight size={17} /></button></div>
             <div className="category-rail">
               {categories.map((c, i) => <button key={c.id} className={`category-tile tone-${i % 4}${category === c.id ? " selected" : ""}`} aria-pressed={category === c.id} onClick={() => chooseCategory(c.id)}>
-                <img src={`/images/${categoryImage(c.name, i)}`} alt="" loading="lazy" /><strong>{c.name}</strong><small>{catalog?.products.filter(p => p.published && p.categoryId === c.id).length || 0} ชิ้นที่คัดให้</small>
+                <ReferenceArt region={referenceCategory(c.name, i)} /><strong>{c.name}</strong><small>{catalog?.products.filter(p => p.published && p.categoryId === c.id).length || 0} ชิ้นที่คัดให้</small>
               </button>)}
             </div>
             {!categories.length && <p className="category-empty">กำลังเตรียมหมวดน่ารัก ๆ แวะกลับมาใหม่ได้เร็ว ๆ นี้ค่ะ</p>}
           </section>
           {settings.bannerUrl ? <img className="custom-shop-banner" src={settings.bannerUrl} alt="แบนเนอร์ร้าน" /> : <button className="story-banner" onClick={showAllProducts}>
-            <span className="story-bag"><ShoppingBag /><b>S</b></span><span className="story-copy"><strong>พิกัดสินค้าใน <em>Shop <Sparkles /></em></strong><small>{settings.tagline}</small></span><img src="/images/category-kitten.jpg" alt="" /><span className="story-action">ดูทั้งหมด <ChevronRight /></span>
+            <ReferenceArt className="reference-story-cat" region={[492, 727, 170, 127]} />
+            <span className="story-bag"><ShoppingBag /><b>S</b></span><span className="story-copy"><strong>พิกัดสินค้าใน <em>Story <Sparkles /></em></strong><small>{settings.tagline}</small></span><span className="story-action">ดูทั้งหมด <ChevronRight /></span>
           </button>}
           <section className="boutique-products" aria-label="สินค้าในหมวดหมู่">
-            {(category || savedOnly) && <button className="boutique-back" onClick={() => chooseCategory("")}><ArrowLeft size={16} /> กลับไปหมวดหมู่</button>}
-            <div className="boutique-section-heading product-section-heading"><h2 ref={heading} tabIndex={-1}><Star fill="currentColor" /> {savedOnly ? "สินค้าที่บันทึก" : activeCategory?.name || "สินค้าแนะนำ"}</h2><label><span>เรียงตาม</span><select aria-label="เรียงสินค้า" value={sort} onChange={e => setSort(e.target.value as ProductSort)}><option value="recommended">แอดมินแนะนำก่อน</option><option value="price-asc">ราคา: ต่ำไปสูง</option><option value="price-desc">ราคา: สูงไปต่ำ</option></select></label></div>
+            {savedOnly && <button className="boutique-back" onClick={() => chooseCategory("")}><ArrowLeft size={16} /> กลับไปหมวดหมู่</button>}
+            <div className="boutique-section-heading product-section-heading"><h2 ref={heading} tabIndex={-1}><Star fill="currentColor" /> {savedOnly ? "สินค้าที่บันทึก" : "สินค้าแนะนำ"}</h2><label><span>เรียงตาม</span><select aria-label="เรียงสินค้า" value={sort} onChange={e => setSort(e.target.value as ProductSort)}><option value="recommended">แอดมินแนะนำก่อน</option><option value="price-asc">ราคา: ต่ำไปสูง</option><option value="price-desc">ราคา: สูงไปต่ำ</option></select></label></div>
             <p className="boutique-result-count" aria-live="polite">{filtered.length} สินค้า{query ? ` · ผลการค้นหา “${query}”` : ""}</p>
             {filtered.length ? <div className="boutique-product-grid">{filtered.map(p => <ProductCard key={p.id} product={p} category={catalog?.categories.find(c => c.id === p.categoryId)?.name} saved={saved.includes(p.id)} onToggleSaved={() => toggleSaved(p.id)} />)}</div> : <div className="center-state"><CatMark /><h2>{query ? "ไม่พบสินค้าที่ตรงกัน" : savedOnly ? "ยังไม่มีสินค้าที่บันทึก" : "กำลังคัดของดี ๆ มาให้"}</h2><p>{query ? "ลองเปลี่ยนคำค้น หรือกลับไปเลือกหมวดอื่นนะคะ" : savedOnly ? "กดหัวใจบนสินค้าที่ชอบ เพื่อเก็บไว้ดูในอุปกรณ์นี้" : "แวะกลับมาดูสินค้าใหม่ได้เร็ว ๆ นี้"}</p>{query && <button className="text-button" onClick={() => setQuery("")}>ล้างคำค้น</button>}</div>}
           </section>

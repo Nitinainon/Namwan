@@ -18,6 +18,8 @@ test("homepage shows categories and products, filters a category and returns to 
   expect(screen.getByText("แก้วเซรามิกสำหรับเช้าที่สดใส")).toBeInTheDocument();
   expect(screen.getByRole("searchbox")).toBeInTheDocument();
   fireEvent.click(category);
+  expect(screen.getByRole("heading", { level: 1, name: /บ้าน & ไลฟ์สไตล์/ })).toBeInTheDocument();
+  expect(screen.getByRole("searchbox")).toHaveAttribute("placeholder", "ค้นหาสินค้าในหมวดนี้...");
   expect(screen.getByText("แก้วเซรามิกสำหรับเช้าที่สดใส")).toBeInTheDocument();
   expect(screen.queryByText("กระเป๋าผ้าเพื่อนแมว")).not.toBeInTheDocument();
   fireEvent.click(screen.getByRole("button", { name: /กลับไปหมวดหมู่/ }));

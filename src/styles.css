@@ -1808,3 +1808,168 @@ textarea {
  .story-bag { display:none; }
  .card-featured { top:auto; bottom:0; border-radius:0 10px 0 0; }
 }
+/* Exact reference proportions and original supplied artwork. */
+.reference-store { background:#fff7f0; --ink:#421a0b; --muted:#656363; }
+.reference-store .boutique-hero { max-width:841px; height:360px; background:radial-gradient(ellipse at 30% 5%,#fff9ef 0,transparent 43%),linear-gradient(110deg,#e9b274,#ffddbb 40%,#fff4e6 69%,#e9ae67); border-radius:0; }
+.reference-store .boutique-hero::after { content:""; position:absolute; bottom:0; left:0; right:0; height:34px; background:repeating-linear-gradient(0deg,#ffcf9d 0,#ffcf9d 15px,#f9c18a 16px,#ffdbb4 17px); }
+.reference-art { display:block; width:100%; overflow:hidden; }
+.reference-family { position:absolute; z-index:1; right:1%; bottom:32px; width:60%; height:auto; aspect-ratio:506/288; mask-image:linear-gradient(90deg,transparent 8%,#000 16%),linear-gradient(180deg,transparent,#000 8%); mask-composite:intersect; }
+.reference-store .boutique-header { z-index:2; inset:21px 34px auto; align-items:flex-start; }
+.reference-store .boutique-brand { margin-top:22px; }
+.reference-category-intro { width:52%; }
+.reference-back { display:inline-flex; align-items:center; gap:10px; color:#fb5718; background:#fffdfa; border:1px solid white; border-radius:45px; padding:15px 26px; font-size:23px; font-weight:600; box-shadow:0 4px 12px #e9985312; min-height:58px; white-space:nowrap; }
+.reference-back svg { width:29px; height:29px; }
+.reference-category-intro h1 { display:flex; align-items:center; gap:12px; font-size:55px; line-height:1.25; margin:26px 0 10px; font-weight:700; overflow-wrap:anywhere; }
+.reference-category-intro h1 svg { width:43px; height:43px; color:#ff5c13; }
+.reference-category-intro > p { font-size:21px; line-height:1.55; color:#696763; max-width:340px; }
+.reference-store .saved-toggle { width:55px; height:55px; margin-top:66px; box-shadow:none; background:#fffdf2; }
+.reference-store .saved-toggle > svg { width:34px; height:34px; color:#ff5c20; }
+.reference-store .boutique-main { max-width:841px; margin:-1px auto 0; border-radius:0; padding:0 28px 38px; background:linear-gradient(#fff8f1,#fff5ed); }
+.reference-store .boutique-search-row { transform:translateY(-35px); margin-bottom:-11px; display:block; }
+.reference-store .boutique-search { width:100%; min-height:69px; border-radius:45px; padding:13px 84px 13px 28px; gap:17px; background:#fffdfb; }
+.reference-store .boutique-search input { font-size:24px; }
+.reference-store .boutique-search > svg { width:35px; height:35px; }
+.reference-store .search-paw { position:absolute; right:0; top:0; width:73px; height:69px; background:#fffaf7; }
+.reference-store .boutique-section-heading { margin-bottom:12px; }
+.reference-store .boutique-section-heading h2 { font-size:28px; gap:11px; }
+.reference-store .boutique-section-heading h2 > svg { width:33px; height:33px; color:#ff601b; }
+.reference-store .boutique-section-heading > button { font-size:19px; font-weight:600; }
+.reference-store .category-rail { gap:8px; padding:3px 0 7px; scrollbar-width:none; }
+.reference-store .category-rail::-webkit-scrollbar { display:none; }
+.reference-store .category-tile { flex:0 0 104px; padding:3px 3px 10px; border-radius:21px; }
+.reference-store .category-tile > .reference-art { width:100%; height:121px; border-radius:17px; }
+.reference-store .category-tile strong { font-size:15px; line-height:1.2; margin-top:10px; }
+.reference-store .category-tile small { display:none; }
+.reference-store .category-tile.selected { border-color:#ff5b18; background:#ffe9d4; box-shadow:inset 0 0 0 2px #fffaf2; }
+.reference-store .story-banner { min-height:135px; padding:20px 18px; gap:19px; border-radius:28px; margin:10px 0 22px; background:radial-gradient(ellipse at 54% 0,#ed5c09,transparent 65%),linear-gradient(110deg,#8c2203,#a83607 60%,#6c1c03); }
+.reference-store .story-bag { position:relative; z-index:1; width:87px; height:88px; border-radius:21px; }
+.reference-store .story-bag svg { width:56px; height:56px; }
+.reference-store .story-bag b { font-size:31px; }
+.reference-store .story-copy { max-width:66%; }
+.reference-store .story-copy > strong { font-size:35px; white-space:nowrap; }
+.reference-store .story-copy > small { font-size:20px; line-height:1.5; margin-top:9px; }
+.reference-store .story-copy em { color:#ffe066; }
+.reference-story-cat { position:absolute; right:17%; bottom:0; width:25%; height:100%; mask-image:linear-gradient(90deg,transparent,#000 12%,#000 86%,transparent); }
+.reference-store .story-action { padding:14px 16px; font-size:18px; background:#ffd04c; }
+.reference-store .product-section-heading { margin-bottom:12px; }
+.reference-store .product-section-heading label { gap:12px; font-size:18px; }
+.reference-store .product-section-heading select { font-size:17px; min-height:48px; border-radius:30px; }
+.reference-store .boutique-result-count { position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); }
+.reference-store .boutique-product-grid { grid-template-columns:repeat(3,minmax(0,1fr)); gap:13px; }
+.reference-store .product-card { border-radius:24px; box-shadow:0 3px 8px #ecaa7830; background:#fffaf5; border:1px solid #ffe5d3; }
+.reference-store .product-row-layout { padding:6px; }
+.reference-store .product-image { aspect-ratio:1.5; border-radius:17px; }
+.reference-store .product-image > .reference-art { width:100%; height:100%; }
+.reference-store .product-copy { padding:4px 8px 5px; }
+.reference-store .product-copy h3 { font-size:18px; line-height:1.35; font-weight:700; margin:0; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+.reference-store .row-description { margin-top:2px; line-height:1.4; font-size:15px; color:#606565; -webkit-line-clamp:1; }
+.card-more { font-size:10px; color:#90725f; margin-top:3px; }
+.card-more summary { cursor:pointer; padding:3px 0; }
+.card-more[open] { padding:5px; border-radius:7px; background:#fff0dd; }
+.card-more p { margin-top:4px; font-size:12px; line-height:1.5; }
+.reference-store .product-price { padding-top:5px; }
+.reference-store .product-shop-link { min-height:44px; border-radius:12px; border:1px solid #ff692f; background:linear-gradient(110deg,#c44210,#cd4612); font-size:16px; font-weight:500; padding:8px 10px; text-shadow:0 1px 1px #8d2107; }
+.reference-store .product-shop-link:hover { background:#d84912; }
+.reference-store .product-unavailable .product-shop-link { background:#f3d6bd; border-color:#edc4a2; color:#785133; text-shadow:none; }
+.reference-store .product-unavailable small { font-size:8px; line-height:1.4; }
+.reference-store .card-heart { width:35px; height:35px; top:4px; right:4px; color:#ff541d; }
+.reference-store .card-featured { font-size:11px; background:#e94308; color:#ffea70; border-radius:16px 0 16px 0; padding:7px 9px; }
+@media(max-width:700px) {
+ .reference-store .boutique-hero { height:290px; }
+ .reference-store .boutique-header { inset:16px 21px auto; }
+ .reference-category-intro { width:55%; }
+ .reference-back { font-size:18px; padding:12px 18px; min-height:47px; gap:7px; }
+ .reference-back svg { width:23px; height:23px; }
+ .reference-category-intro h1 { font-size:39px; gap:8px; margin:24px 0 8px; }
+ .reference-category-intro h1 svg { width:32px; height:32px; }
+ .reference-category-intro > p { font-size:16px; max-width:250px; }
+ .reference-family { width:61%; bottom:31px; }
+ .reference-store .saved-toggle { width:42px; height:42px; margin-top:62px; }
+ .reference-store .saved-toggle > svg { width:27px; height:27px; }
+ .reference-store .boutique-main { padding:0 20px 30px; }
+ .reference-store .boutique-search { min-height:59px; padding:10px 65px 10px 20px; gap:12px; }
+ .reference-store .boutique-search input { font-size:20px; }
+ .reference-store .search-paw { width:61px; height:59px; }
+ .reference-store .boutique-search > svg { width:28px; height:28px; }
+ .reference-store .boutique-search-row { transform:translateY(-29px); margin-bottom:-8px; }
+ .reference-store .boutique-section-heading h2 { font-size:24px; gap:8px; }
+ .reference-store .boutique-section-heading h2 > svg { width:28px; height:28px; }
+ .reference-store .boutique-section-heading > button { font-size:15px; }
+ .reference-store .category-tile { flex-basis:92px; }
+ .reference-store .category-tile > .reference-art { height:102px; }
+ .reference-store .category-tile strong { font-size:12px; }
+ .reference-store .story-banner { min-height:110px; padding:15px; gap:13px; }
+ .reference-store .story-bag { width:60px; height:66px; border-radius:15px; }
+ .reference-store .story-bag svg { width:40px; height:40px; }
+ .reference-store .story-bag b { font-size:23px; }
+ .reference-store .story-copy > strong { font-size:27px; }
+ .reference-store .story-copy > small { font-size:14px; max-width:none; }
+ .reference-store .story-action { font-size:13px; padding:11px 12px; }
+ .reference-store .product-section-heading label { gap:7px; }
+ .reference-store .product-section-heading select { font-size:13px; min-height:44px; max-width:190px; }
+ .reference-store .product-copy h3 { font-size:14px; }
+ .reference-store .row-description { font-size:12px; }
+ .reference-store .product-copy { padding:4px; }
+ .reference-store .product-shop-link { font-size:12px; padding:7px; }
+ .reference-store .product-card { border-radius:18px; }
+ .reference-store .product-image { border-radius:12px; }
+ .reference-store .card-heart { width:29px; height:29px; }
+ .reference-store .card-heart svg { width:18px; }
+ .reference-store .card-featured { font-size:9px; padding:5px; }
+}
+@media(max-width:440px) {
+ .reference-store .boutique-hero { height:235px; }
+ .reference-store .boutique-header { inset:14px 15px auto; }
+ .reference-store .boutique-brand { margin-top:4px; }
+ .reference-back { font-size:14px; min-height:44px; padding:9px 13px; }
+ .reference-back svg { width:21px; height:21px; }
+ .reference-category-intro { width:57%; }
+ .reference-category-intro h1 { font-size:28px; gap:5px; margin:19px 0 7px; }
+ .reference-category-intro h1 svg { width:25px; height:25px; }
+ .reference-category-intro > p { font-size:12px; max-width:170px; }
+ .reference-family { width:65%; right:0; bottom:29px; }
+ .reference-store .saved-toggle { width:36px; height:36px; margin-top:62px; }
+ .reference-store .saved-toggle > svg { width:24px; height:24px; }
+ .reference-store .boutique-main { padding:0 12px 25px; }
+ .reference-store .boutique-search { min-height:53px; padding:10px 53px 10px 14px; gap:9px; }
+ .reference-store .boutique-search input { font-size:16px; }
+ .reference-store .search-paw { display:grid; width:52px; height:53px; }
+ .reference-store .search-paw svg { width:26px; height:26px; }
+ .reference-store .boutique-search-row { transform:translateY(-27px); margin-bottom:-8px; }
+ .reference-store .boutique-section-heading { gap:6px; margin-bottom:8px; }
+ .reference-store .boutique-section-heading h2 { font-size:19px; gap:6px; }
+ .reference-store .boutique-section-heading h2 > svg { width:25px; height:25px; }
+ .reference-store .boutique-section-heading > button { font-size:12px; }
+ .reference-store .category-rail { gap:5px; margin:0; }
+ .reference-store .category-tile { flex-basis:73px; padding:3px 3px 7px; border-radius:16px; }
+ .reference-store .category-tile > .reference-art { height:78px; border-radius:11px; }
+ .reference-store .category-tile strong { font-size:10px; margin-top:7px; }
+ .reference-store .story-banner { min-height:89px; padding:12px 9px; gap:8px; border-radius:19px; margin:9px 0 17px; }
+ .reference-store .story-bag { display:grid; width:40px; height:47px; border-radius:11px; }
+ .reference-store .story-bag svg { width:29px; height:29px; }
+ .reference-store .story-bag b { font-size:16px; }
+ .reference-store .story-copy > strong { font-size:18px; }
+ .reference-store .story-copy > small { font-size:10px; margin-top:4px; }
+ .reference-store .story-copy em svg { width:13px; }
+ .reference-store .story-action { font-size:10px; padding:9px 8px; }
+ .reference-store .story-action svg { width:14px; }
+ .reference-store .product-section-heading select { font-size:10px; max-width:153px; padding:8px 22px 8px 9px; }
+ .reference-store .product-section-heading h2 { font-size:18px; }
+ .reference-store .boutique-product-grid { gap:7px; }
+ .reference-store .product-row-layout { padding:4px; }
+ .reference-store .product-card { border-radius:14px; }
+ .reference-store .product-image { aspect-ratio:1.35; border-radius:10px; }
+ .reference-store .product-copy { padding:4px 2px 3px; }
+ .reference-store .product-copy h3 { font-size:11px; line-height:1.4; }
+ .reference-store .row-description { font-size:10px; }
+ .reference-store .card-more { font-size:8px; }
+ .reference-store .card-more p { font-size:10px; }
+ .reference-store .product-shop-link { font-size:10px; padding:6px 4px; min-height:38px; gap:2px; border-radius:8px; }
+ .reference-store .product-shop-link svg { width:12px; }
+ .reference-store .product-shop-link svg:last-child { display:none; }
+ .reference-store .card-heart { width:25px; height:25px; top:3px; right:3px; }
+ .reference-store .card-heart svg { width:16px; }
+ .reference-store .card-featured { font-size:8px; top:auto; bottom:0; border-radius:0 8px 0 0; padding:4px; }
+ .reference-store .card-featured svg { width:10px; }
+ .reference-store .product-unavailable small { font-size:7px; }
+}

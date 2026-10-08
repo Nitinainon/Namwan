@@ -18,3 +18,9 @@ Built-in image generation tool; JPEG delivery encoding quality 88. Original gene
 - `public/images/category-play.jpg` (300px): an adorable ginger white kitten playing with a large coral red ball of yarn, pastel mint green background.
 
 Shared category prompt: Square isolated website category illustration. [Subject above]. Premium cute stylized 3D animated storybook render with oversized shining brown eyes, round chubby proportions, tiny pink nose, soft detailed fur. Warm studio lighting, soft shadows, colorful smooth seamless backdrop. Entire subject visible and centered with small margin, no text, no UI, no border, no letters. Matches a warm orange cat boutique.
+
+## User-supplied category reference (2026-10-08)
+
+The user requested that the category page match their latest screenshot exactly. Original supplied source: `docs/shop-design-reference.png` (841 × 1870). Delivery asset: `public/images/shop-reference.jpg` (same dimensions, JPEG quality 94, 489 KB).
+
+`src/components/ReferenceArt.tsx` renders SVG viewBox regions from that image for the cat family, category artwork, Story banner cat, and three bundled sample-product illustrations. Labels, headings, search, category buttons, favorites, sorting, and outgoing links remain real HTML controls. Original uploaded product URLs continue to render their images. The database catalog was not rewritten by this design update.
