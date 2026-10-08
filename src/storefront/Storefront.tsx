@@ -41,6 +41,8 @@ export function Storefront() {
   }, []);
   const settings = catalog?.settings || demoCatalog.settings;
   const activeCategory = catalog?.categories.find(c => c.id === category);
+  const referenceMode = catalog?.products.some(p => p.imageUrl.includes("/images/reference-"));
+  const heroCategory = activeCategory || (referenceMode ? catalog?.categories.find(c => c.name === "บ้านแมว") : undefined);
   useEffect(() => {
     document.title = `${activeCategory?.name || settings.siteName} · ของน่ารักที่อยากบอกต่อ`;
   }, [settings.siteName, activeCategory?.name]);
@@ -60,20 +62,20 @@ export function Storefront() {
   const categories = [...(catalog?.categories || [])].sort((a,b) => a.sortOrder - b.sortOrder);
   const savedCount = catalog?.products.filter(p => p.published && saved.includes(p.id)).length || 0;
   return (
-    <div className={`boutique-store reference-store${activeCategory ? " category-view" : ""}`}>
+    <div className={`boutique-store reference-store${heroCategory ? " category-view" : ""}${referenceMode ? " exact-reference" : ""}`}>
       <header className="boutique-hero">
         <ReferenceArt className="reference-family" region={[326, 84, 506, 288]} label="แม่แมวกับลูกแมวทั้งสี่ต้อนรับเข้าร้าน" />
         <div className="boutique-header">
-          {activeCategory ? <div className="reference-category-intro">
+          {heroCategory ? <div className="reference-category-intro">
             <button className="reference-back" onClick={() => chooseCategory("")}><ArrowLeft /> กลับไปหมวดหมู่</button>
-            <h1>{activeCategory.name} <PawPrint fill="currentColor" /></h1>
-            <p>สินค้าที่แม่คัดมาให้แล้ว<br />ใช้งานดี น่ารัก และคุณภาพดี</p>
+            <h1>{heroCategory.name} <PawPrint fill="currentColor" /></h1>
+            <p>สินค้าสำหรับน้องแมว คัดมาให้แล้ว<br />ใช้งานดี น่ารัก และคุณภาพดี</p>
           </div> :
           <a className="boutique-brand" href="/" aria-label={`${settings.siteName} หน้าหลัก`}>
             <img src="/images/category-kitten.jpg" alt="" />
             <span><h1>{settings.siteName}</h1><small>คัดด้วยใจ พร้อมผู้ช่วยตัวน้อย ♡</small></span>
           </a>}
-          {!activeCategory && <button className={`saved-toggle${savedOnly ? " active" : ""}`} aria-label={`ดูสินค้าที่บันทึก ${savedCount} ชิ้น`} aria-pressed={savedOnly} onClick={() => { setSavedOnly(!savedOnly); setCategory(""); setQuery(""); heading.current?.focus(); }}><Heart fill={savedOnly ? "currentColor" : "none"} />{savedCount > 0 && <span>{savedCount}</span>}</button>}
+          {!heroCategory && <button className={`saved-toggle${savedOnly ? " active" : ""}`} aria-label={`ดูสินค้าที่บันทึก ${savedCount} ชิ้น`} aria-pressed={savedOnly} onClick={() => { setSavedOnly(!savedOnly); setCategory(""); setQuery(""); heading.current?.focus(); }}><Heart fill={savedOnly ? "currentColor" : "none"} />{savedCount > 0 && <span>{savedCount}</span>}</button>}
         </div>
       </header>
       <main className="boutique-main" id="collection">
@@ -88,7 +90,7 @@ export function Storefront() {
           <section className="boutique-categories" aria-label="เลือกหมวดหมู่">
             <div className="boutique-section-heading"><h2><PawPrint fill="currentColor" /> เลือกหมวดหมู่</h2><button onClick={showAllProducts}>ดูทั้งหมด <ChevronRight size={17} /></button></div>
             <div className="category-rail">
-              {categories.map((c, i) => <button key={c.id} className={`category-tile tone-${i % 4}${category === c.id ? " selected" : ""}`} aria-pressed={category === c.id} onClick={() => chooseCategory(c.id)}>
+              {categories.map((c, i) => <button key={c.id} className={`category-tile tone-${i % 4}${(category || (referenceMode ? heroCategory?.id : "")) === c.id ? " selected" : ""}`} aria-pressed={(category || (referenceMode ? heroCategory?.id : "")) === c.id} onClick={() => chooseCategory(c.id)}>
                 <ReferenceArt region={referenceCategory(c.name, i)} /><strong>{c.name}</strong><small>{catalog?.products.filter(p => p.published && p.categoryId === c.id).length || 0} ชิ้นที่คัดให้</small>
               </button>)}
             </div>

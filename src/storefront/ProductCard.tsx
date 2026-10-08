@@ -8,8 +8,15 @@ const sampleArtwork: Record<string, readonly [number, number, number, number]> =
   "/images/lamp.svg": [570, 978, 235, 130],
   "/images/bowl.svg": [305, 1277, 240, 118],
 };
+const referenceArtwork: Record<string, readonly [number, number, number, number]> = {
+  mug:[43,979,242,128], bed:[307,979,236,128], lamp:[570,978,235,130],
+  tower:[42,1275,241,121], bowl:[305,1277,240,118], toy:[570,1274,235,124],
+  litter:[43,1549,239,144], brush:[306,1549,239,144], carrier:[570,1549,236,144],
+};
 export function ProductImage({ product }: { product: Product }) {
   const [failed, setFailed] = useState(false);
+  const referenceKey = product.imageUrl.match(/^https:\/\/numwan\.netlify\.app\/images\/reference-(\w+)\.svg$/)?.[1];
+  if (referenceKey && referenceArtwork[referenceKey]) return <ReferenceArt region={referenceArtwork[referenceKey]} label={product.name} />;
   return product.imageUrl && !failed ? (
     <img
       src={product.imageUrl}
@@ -51,6 +58,7 @@ export function ProductCard({
         </div>
         <div className="product-copy">
           <h3>{product.name}</h3>
+          {product.imageUrl.includes("/images/reference-") && product.recommendation && <p className="row-description">{product.recommendation}</p>}
           <div className="product-price">
             {isAffiliateUrl(product.affiliateUrl) ? <a className="product-shop-link" href={product.affiliateUrl} target="_blank" rel="sponsored noopener noreferrer" aria-label={`ดูใน Shopee — ดูข้อมูลเพิ่มเติม: ${product.name}`}><ShopeeBag /> <span>ดูใน Shopee</span> <ChevronRight size={22} /></a> : <div className="product-unavailable"><button className="product-shop-link" disabled title="ยังไม่มีลิงก์ซื้อ" aria-label="ดูใน Shopee — ดูข้อมูลเพิ่มเติม (ยังไม่มีลิงก์ซื้อ)"><ShopeeBag /> <span>ดูใน Shopee</span> <ChevronRight size={22} /></button><small>สินค้าตัวอย่าง · ยังไม่มีลิงก์ซื้อ</small></div>}
           </div>

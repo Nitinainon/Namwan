@@ -26,6 +26,7 @@ import { ProductImage, priceLabel } from "../storefront/ProductCard";
 import { ProductEditor } from "./ProductEditor";
 import { CategoryEditor } from "./CategoryEditor";
 import { SettingsEditor } from "./SettingsEditor";
+import { applyReferenceCatalog } from "../lib/referenceCatalog";
 type Editor =
   | { kind: "product"; product?: Product }
   | { kind: "category"; category?: Category }
@@ -226,6 +227,13 @@ export default function Dashboard({
       </div>
       <StatusMessage message={message} error={error} />
       <div className="admin-refresh">
+        <button className="button secondary" disabled={loading || busy} onClick={async () => {
+          if (lock.current) return;
+          lock.current = true; setBusy(true); setError(false);
+          try { await applyReferenceCatalog(); await load(); setMessage("จัดหน้าร้านตามภาพแล้ว: 7 หมวดและ 9 สินค้า"); }
+          catch (e) { setError(true); setMessage(errorMessage(e)); }
+          finally { lock.current = false; setBusy(false); }
+        }}>{busy ? "กำลังจัดหน้าร้าน…" : "ใช้แบบภาพอ้างอิง · 7 หมวด 9 สินค้า"}</button>
         <button
           className="text-button"
           disabled={loading}
