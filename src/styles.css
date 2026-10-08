@@ -1992,3 +1992,17 @@ textarea {
  .reference-store .product-shop-link .shopee-bag-icon { width:17px; height:22px; }
  .reference-store .product-shop-link svg:last-child { width:12px; height:18px; }
 }
+
+/* Reference category strip: seven compact tile positions, aligned at the top. */
+.reference-store .boutique-categories { container-type:inline-size; }
+.reference-store .boutique-categories .boutique-section-heading { margin:0 0 5px; gap:8px; }
+.reference-store .boutique-categories .boutique-section-heading h2 { font-size:clamp(16px,3.6cqw,28px); gap:6px; }
+.reference-store .boutique-categories .boutique-section-heading h2 > svg { width:1.15em; height:1.15em; color:#ff571b; }
+.reference-store .boutique-categories .boutique-section-heading > button { font-size:clamp(11px,2.6cqw,17px); min-height:30px; padding:0; gap:3px; }
+.reference-store .category-rail { align-items:stretch; gap:4px; margin:0; padding:2px 0 5px; }
+.reference-store .category-tile { flex:1 0 calc((100% - 24px)/7); min-width:47px; display:flex; flex-direction:column; align-items:stretch; justify-content:flex-start; padding:2px 2px 7px; border:1.5px solid transparent; border-radius:clamp(12px,2.8cqw,22px); }
+.reference-store .category-tile > .reference-art { width:100%; height:auto; aspect-ratio:0.84; border-radius:clamp(9px,2.1cqw,17px); display:block; }
+.reference-store .category-tile strong { font-size:clamp(8px,1.95cqw,15px); line-height:1.22; margin-top:6px; font-weight:700; color:#17110e; }
+.reference-store .category-tile.selected { border-color:#ff5014; background:#ffe8d6; box-shadow:0 2px 4px #ee6b2820,inset 0 0 0 1px #fff8ef; }
+.reference-store .category-tile:hover { background:#fff0e5; }
+.reference-store .category-tile:focus-visible { outline:2px solid #ab360d; outline-offset:2px; }
